@@ -36,6 +36,9 @@ export function drawFrame(ctx: Ctx, input: RenderInput, frame: number): void {
     ctx.save();
     // Idle motion layer: a 0-3% push-in + sub-pixel drift across the beat.
     // Guarantees no frozen frames, and motion-graphics holds never feel dead.
+    ctx.fillStyle = p.fg;
+    ctx.strokeStyle = p.fg;
+    ctx.globalAlpha = 1;
     const t = localF / Math.max(1, beat.durationInFrames - 1);
     const zoom = 1 + 0.028 * t;
     const dx = Math.sin(t * Math.PI * 0.5) * 6;
@@ -71,7 +74,12 @@ export function drawFrame(ctx: Ctx, input: RenderInput, frame: number): void {
       ctx.fillRect(0, 0, w, h);
     }
 
-    if (input.style.captionStyle !== 'none') {
+    // Text-forward scenes already show the line; captioning them again reads as a mistake.
+    const showsOwnText = beat.visual.type === 'kinetic-type' || beat.visual.type === 'quote';
+    const onScreenEchoesVo =
+      showsOwnText &&
+      overlapRatio(beat.onScreen, beat.words.map((w) => w.word).join(' ')) > 0.5;
+    if (input.style.captionStyle !== 'none' && !onScreenEchoesVo) {
       drawCaptions({
         ctx,
         beat,
@@ -91,6 +99,15 @@ export function drawFrame(ctx: Ctx, input: RenderInput, frame: number): void {
   drawGrain(ctx, w, h, input.style.grain, frame);
   drawSafeAreaDebug(ctx, input);
   ctx.restore();
+}
+
+/** Share of on-screen words that are also spoken in this beat (0..1). */
+function overlapRatio(onScreen: string, spoken: string): number {
+  const norm = (t: string) => t.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean);
+  const a = norm(onScreen);
+  if (a.length === 0) return 0;
+  const b = new Set(norm(spoken));
+  return a.filter((w) => b.has(w)).length / a.length;
 }
 
 function findBeat(input: RenderInput, frame: number): RenderBeat | undefined {

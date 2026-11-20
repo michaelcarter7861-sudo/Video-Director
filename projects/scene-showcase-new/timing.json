@@ -1,0 +1,51 @@
+{
+  "targetSec": 22,
+  "actualSec": 18.17,
+  "beats": [
+    {
+      "id": "hook",
+      "requestedMaxSec": 2.6,
+      "measuredMs": 2228,
+      "finalSec": 2.233,
+      "capped": false
+    },
+    {
+      "id": "glitch",
+      "requestedMaxSec": 3.2,
+      "measuredMs": 2960,
+      "finalSec": 2.967,
+      "capped": false
+    },
+    {
+      "id": "dots",
+      "requestedMaxSec": 4,
+      "measuredMs": 4058,
+      "finalSec": 4.067,
+      "capped": true
+    },
+    {
+      "id": "time",
+      "requestedMaxSec": 4.4,
+      "measuredMs": 2958,
+      "finalSec": 2.967,
+      "capped": false
+    },
+    {
+      "id": "quote",
+      "requestedMaxSec": 4.4,
+      "measuredMs": 3691,
+      "finalSec": 3.7,
+      "capped": false
+    },
+    {
+      "id": "loop",
+      "requestedMaxSec": 3.4,
+      "measuredMs": 2228,
+      "finalSec": 2.233,
+      "capped": false
+    }
+  ],
+  "warnings": [
+    "beat dots: audio is 4.06s but maxSec was 4s — kept the audio, duration extended"
+  ]
+}

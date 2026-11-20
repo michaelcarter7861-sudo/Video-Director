@@ -1,0 +1,59 @@
+1
+00:00:00,000 --> 00:00:02,143
+Everything you are about to see
+
+2
+00:00:02,143 --> 00:00:01,153
+was drawn by. Chapter one. The
+
+3
+00:00:01,153 --> 00:00:02,985
+agent writes a spec, never the
+
+4
+00:00:02,985 --> 00:00:02,113
+pixels. Beats, roles, visual types, and
+
+5
+00:00:02,113 --> 00:00:03,945
+a hard cap on seconds. That
+
+6
+00:00:03,945 --> 00:00:00,782
+is the whole contract. Chapter two.
+
+7
+00:00:00,782 --> 00:00:02,682
+Meaning comes from structure, not from
+
+8
+00:00:02,682 --> 00:00:01,484
+footage. Ninety four percent of a
+
+9
+00:00:01,484 --> 00:00:04,029
+good explainer is timing and contrast.
+
+10
+00:00:00,000 --> 00:00:01,905
+And here is the part nobody
+
+11
+00:00:01,905 --> 00:00:04,069
+says out loud: variety is the
+
+12
+00:00:04,069 --> 00:00:02,051
+moat. Which brings us back. You
+
+13
+00:00:02,051 --> 00:00:03,846
+do not need a video model
+
+14
+00:00:03,846 --> 00:00:01,274
+to ship video. Everything you are
+
+15
+00:00:01,274 --> 00:00:01,832
+about to

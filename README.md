@@ -23,9 +23,10 @@ What you gain: a renderer you can read in an afternoon, MIT licensing, and no br
 
 ## Status
 
-Working end-to-end. This is the **Phase 1** deliverable from `docs/02-PLAN.md`:
+Working end-to-end. Phases 1–4 of `docs/02-PLAN.md` are shipped:
 
-- 8 scene types: `kinetic-type`, `code`, `terminal`, `stat`, `chart`, `diagram`, `split`, `abstract`
+- 12 scene types: `kinetic-type`, `code`, `terminal`, `stat`, `chart`, `diagram`, `split`, `abstract`,
+  `glitch`, `dot-grid`, `timeline`, `quote`
 - 4 template families × 4 palettes × 3 font pairs (OFL fonts vendored via npm)
 - `director.json` contract with zod + JSON Schema + structured validation errors (agent repair loop)
 - TTS chain: Kokoro (word timings) → FreeLLMAPI → macOS `say` → deterministic dummy voice
@@ -35,7 +36,14 @@ Working end-to-end. This is the **Phase 1** deliverable from `docs/02-PLAN.md`:
 - QA gates: duration, resolution, fps, loudness, true peak, black frames, frozen frames, hook timing, visual variety, file size
 - Publish pack: titles, description, tags, SRT, license manifest, synthetic-voice disclosure
 - Variation engine: one spec → N visibly different videos
-- 17 tests (determinism, validation, captions, timing, schema parity)
+- **Distinctness gate**: palette + structure distance across a variant batch (blocks template fatigue)
+- **Rules critic**: deterministic pre-flight review that emits appliable patches
+  (`claude -p` optional second opinion)
+- **Best-frame thumbnails**: contrast / edge-energy / ink-coverage scored, 1280px JPEG
+- **Review page**: one self-contained `review.html` — video, QA gates, critic, titles, licences
+- **Long → shorts**: re-directed 9:16 excerpts with their own hook and loop, not crops
+- Every `build` now emits critic + thumbnail + review page automatically
+- 27 tests (determinism, validation, captions, timing, schema parity, scenes, critic, distinctness, shorts)
 
 ## Quick start
 
@@ -57,11 +65,21 @@ npx tsx src/cli.ts build --spec examples/long/director.json --voice dummy --musi
 
 # 5. one brief, four different videos
 npx tsx src/cli.ts variants --spec examples/demo/director.json --count 4
+
+# 6. check that the variants actually look different (exit 4 if not)
+npx tsx src/cli.ts distinct --ids why-shorts-die-at-2s-v1,why-shorts-die-at-2s-v2,why-shorts-die-at-2s-v3
+
+# 7. one long video -> vertical shorts that stand alone
+npx tsx src/cli.ts shorts --spec examples/long/director.json --count 3
+npx tsx src/cli.ts build --spec projects/long-form-agent-video-engine-shorts/long-form-agent-video-engine-s1.json --voice dummy
+
+# 8. review everything in a browser (no server, relative paths only)
+open out/why-shorts-die-at-2s/review.html
 ```
 
-Outputs land in `out/<id>/`: `video.mp4`, `contact-sheet.png`, `thumb.png`.
+Outputs land in `out/<id>/`: `video.mp4`, `contact-sheet.png`, `thumb.png`, `thumb.jpg`, `review.html`, `stills/`.
 Project artefacts land in `projects/<id>/`: `director.json`, `render.json`, `timing.json`, `qa.json`,
-`publish.json`, `manifest.json`, `captions.srt`.
+`publish.json`, `manifest.json`, `captions.srt`, `critique.json`, `director.patched.json`.
 
 ## Commands
 
@@ -72,6 +90,11 @@ still    --spec <file> --frame <n>            one PNG — cheapest feedback loop
 sheet    --spec <file>                        contact sheet of 9 frames
 build    --spec <file> [--draft] [--voice p] [--music <file> | --music-bed]
 variants --spec <file> [--count N] [--draft]  variation engine
+critique --spec <file> [--llm] [--apply]      rules critic (+ optional Claude Code pass)
+distinct --ids a,b,c                          distinctness gate across built variants
+shorts   --spec <long.json> [--count N]       long-form → N standalone vertical shorts
+thumb    --spec <file>                        best thumbnail frame → PNG + JPG
+review   --spec <file> [--distinct a,b]       static review page
 voice    --text "<line>"                      probe the TTS chain
 qa       --spec <file> --file <mp4>           re-run gates on an existing render
 inspect  <file.mp4>                           probe any video
@@ -118,21 +141,23 @@ That is the "agent works freely, permissions always yes" setup: **yes by allowli
 
 ```
 src/
-  cli.ts                 entrypoint (spec | plan | still | sheet | build | variants | voice | qa)
+  cli.ts                 entrypoint (spec | plan | still | sheet | build | variants | critique |
+                         distinct | shorts | thumb | review | voice | qa | inspect)
   schema/director.ts     zod contract + structured validation
   brand/tokens.ts        palettes, font pairs, template families, canvases
   lib/                   rng, easing, fonts, wav, ffmpeg resolution
   engine/                draw helpers, captions, compositor (render.ts), types
-  scenes/                8 scene modules + registry
-  pipeline/              tts, plan (timing), audio (music/ducking), qa, publish, variants
-tests/                   17 contract tests
+  scenes/                12 scene modules + registry
+  pipeline/              tts, plan (timing), audio (music/ducking), qa, publish, variants,
+                         critic, distinct, thumbnail, review, shorts
+tests/                   27 contract tests
 examples/                short (9:16) + long (16:9) specs
 docs/                    research, architecture, roadmap, setup, prompts, workflows
 ```
 
 ## Docs
 
-Start with `docs/08-PHASE1-SCAFFOLD.md` (what this code implements), then
+Start with `docs/08-PHASE1-SCAFFOLD.md` (what this code implements), `docs/10-PHASE4-REVIEW.md` (critic, distinctness, shorts), then
 `docs/01-ARCHITECTURE.md` (design), `docs/05-SETUP-CHECKLIST.md` (agent wiring),
 `docs/03-REPO-CATALOGUE.md` (which repos to pin vs read), `docs/06-AGENT-PROMPTS.md` (prompt drafts).
 
@@ -142,4 +167,8 @@ Start with `docs/08-PHASE1-SCAFFOLD.md` (what this code implements), then
 - Rendering is CPU-bound: a 30s 1080×1920 short takes ~2 min on 2 cores. Long-form wants CI or a bigger box.
 - The dummy voice is a **test tone**, not a narrator. Use Kokoro for anything a human watches.
 - No stock footage and no AI video: the look is motion-graphics. That is a design choice, not a shortcoming.
+- `critiqueWithLLM` is the only part of the critic that needs the `claude` CLI; without it the rules layer
+  still runs and the build is never blocked.
+- The distinctness threshold (0.18 avg palette+structure distance) was calibrated on this repo's demos.
+  If your batch is a single template family, expect it to fail until you change palette *and* opening shot.
 - Free-model agents are less reliable than frontier ones — which is exactly why the engine never depends on them.

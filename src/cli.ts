@@ -14,6 +14,11 @@ import { runQa, normalizeLoudness } from './pipeline/qa.js';
 import { mixMusic, synthMusicBed } from './pipeline/audio.js';
 import { buildPublishPack, writePublishPack } from './pipeline/publish.js';
 import { planVariants, applyVariant } from './pipeline/variants.js';
+import { critiqueRules, critiqueWithLLM, writeCritique, applyPatches } from './pipeline/critic.js';
+import { bestThumbnail, scoreFrame } from './pipeline/thumbnail.js';
+import { writeReviewPage } from './pipeline/review.js';
+import { shortsFromLong, saveShorts, pickWindows } from './pipeline/shorts.js';
+import { stillHashes, compareVariants, type Hash } from './pipeline/distinct.js';
 import { synthesize, type PreferProvider } from './pipeline/tts.js';
 import { ffmpegPath } from './lib/ffmpeg.js';
 import { execFile } from 'node:child_process';
@@ -32,6 +37,11 @@ video-director — deterministic video engine (no Remotion, no video model)
 
   spec    --brief <file>  [--out <file>]             validate a director.json (agent writes it)
   variants --spec <file> [--count N] [--draft]        one spec -> N visibly different videos
+  critique --spec <file> [--llm]                     rules critic (+ optional Claude Code pass)
+  shorts   --spec <long.json> [--count N]            long-form -> N vertical shorts (re-directed)
+  distinct --ids a,b,c                               aHash distinctness gate across built variants
+  thumb    --spec <file>                             best thumbnail frame -> PNG + JPG
+  review   --spec <file> [--distinct a,b]           static review page (video, qa, critic, titles)
   plan    --spec <file>                              timing estimate before you spend a render
   build   --spec <file> [--draft] [--voice <p>]       spec -> voice -> timeline -> render -> qa -> publish
   still   --spec <file> --frame <n>                  one PNG (cheapest feedback)
@@ -81,6 +91,10 @@ async function main() {
       count: { type: 'string' },
       music: { type: 'string' },
       'music-bed': { type: 'boolean', default: false },
+      llm: { type: 'boolean', default: false },
+      ids: { type: 'string' },
+      distinct: { type: 'string' },
+      apply: { type: 'boolean', default: false },
       quiet: { type: 'boolean', default: false },
     },
     allowPositionals: true,
@@ -221,6 +235,28 @@ async function main() {
       const pack = buildPublishPack(withPayloads, built.report, JSON.parse(fs.readFileSync(built.wordsPath, 'utf8')) as never);
       writePublishPack(pack, dir);
 
+      // critic (rules layer — free, deterministic) + thumbnail + review page
+      const critique = critiqueRules(withPayloads, built.renderInput, built.report);
+      writeCritique(critique, dir);
+      const thumb = await bestThumbnail(built.renderInput, path.join(OUT, spec.id));
+      const stillsRel: string[] = [];
+      for (const frame of pickFrames(built.renderInput.totalFrames, 6)) {
+        const file = path.join(OUT, spec.id, 'stills', `f${frame}.png`);
+        renderStill(built.renderInput, frame, file);
+        stillsRel.push(path.relative(path.join(OUT, spec.id), file));
+      }
+      const reviewFile = writeReviewPage({
+        spec: withPayloads,
+        timing: built.report,
+        qa,
+        critique,
+        publish: pack,
+        videoRelPath: 'video.mp4',
+        stillsRel,
+        thumbRel: path.relative(path.join(OUT, spec.id), thumb.jpg),
+        outFile: path.join(OUT, spec.id, 'review.html'),
+      });
+
       const secs = ((Date.now() - started) / 1000).toFixed(1);
       console.log(`\n✓ ${finalOut}  (${built.report.actualSec}s, ${secs}s wall)`);
       console.log(`  qa: ${qa.pass ? 'PASS' : 'FAIL'}`);
@@ -231,7 +267,11 @@ async function main() {
         console.log('  warnings:');
         for (const warn of built.report.warnings) console.log(`   ! ${warn}`);
       }
-      console.log(`  review: ${sheet}`);
+      console.log(`  critic: ${critique.verdict} (${critique.issues.length} issue${critique.issues.length === 1 ? '' : 's'})`);
+      for (const issue of critique.issues) console.log(`   [${issue.severity}] ${issue.beatId}: ${issue.problem}`);
+      console.log(`  thumb:  ${thumb.jpg} (frame ${thumb.frame}, score ${thumb.score})`);
+      console.log(`  sheet:  ${sheet}`);
+      if (!values.quiet) console.log(`  review: ${reviewFile}`);
       process.exit(qa.pass ? 0 : 3);
       break;
     }
@@ -260,6 +300,156 @@ async function main() {
           console.log(`  ✓ ${variantSpec.id} → ${sheet}`);
         }
       }
+      break;
+    }
+
+    case 'critique': {
+      if (!values.spec) usage();
+      const spec = await readSpec(values.spec);
+      const dir = projectDirFor(spec);
+      const renderPath = path.join(dir, 'render.json');
+      if (!fs.existsSync(renderPath)) {
+        console.error('no render.json — run build (or sheet) first');
+        process.exit(2);
+      }
+      const input = JSON.parse(fs.readFileSync(renderPath, 'utf8'));
+      const timing = JSON.parse(fs.readFileSync(path.join(dir, 'timing.json'), 'utf8'));
+      const rules = critiqueRules(spec, input, timing);
+      let critique = rules;
+      if (values.llm) {
+        const stillsDir = path.join(OUT, spec.id, 'stills');
+        for (const frame of pickFrames(input.totalFrames, 6)) {
+          renderStill(input, frame, path.join(stillsDir, `f${frame}.png`));
+        }
+        const llm = await critiqueWithLLM(spec, input, stillsDir);
+        if (llm) {
+          critique = {
+            ...llm,
+            source: 'rules+llm',
+            issues: [...rules.issues, ...llm.issues],
+            patches: [...rules.patches, ...llm.patches],
+            notes: [...new Set([...rules.notes, ...llm.notes])],
+            verdict: rules.verdict === 'patch' || llm.verdict === 'patch' ? 'patch' : 'ship',
+          };
+        } else {
+          console.log('  (claude CLI unavailable — rules critique only)');
+        }
+      }
+      const file = writeCritique(critique, dir);
+      console.log(`✓ ${file}`);
+      console.log(`  verdict: ${critique.verdict} (${critique.source})`);
+      for (const issue of critique.issues) console.log(`   [${issue.severity}] ${issue.beatId}: ${issue.problem}`);
+      for (const patch of critique.patches) console.log(`   patch ${patch.beatId}.${patch.field}: ${patch.from} → ${patch.to}`);
+      for (const note of critique.notes) console.log(`   note: ${note}`);
+      if (values.apply && critique.patches.length > 0) {
+        const patched = applyPatches(spec, critique.patches);
+        fs.writeFileSync(path.join(dir, 'director.patched.json'), JSON.stringify(patched, null, 2));
+        console.log(`  patched spec → ${path.join(dir, 'director.patched.json')}`);
+      }
+      break;
+    }
+
+    case 'shorts': {
+      if (!values.spec) usage();
+      const spec = await readSpec(values.spec);
+      const dir = projectDirFor(spec);
+      const renderPath = path.join(dir, 'render.json');
+      if (!fs.existsSync(renderPath)) {
+        console.error('build the long video first (it needs the render timeline)');
+        process.exit(2);
+      }
+      const input = JSON.parse(fs.readFileSync(renderPath, 'utf8'));
+      const count = Math.max(1, Math.min(6, Number(values.count ?? 3)));
+      const windows = pickWindows(spec, input, count);
+      console.log('selected windows:');
+      console.table(windows.map((w) => ({ start: w.startSec, end: w.endSec, score: w.score, hook: w.hookLine.slice(0, 48) })));
+      const shorts = shortsFromLong(spec, input, count);
+      const files = saveShorts(shorts, path.join(ROOT, 'projects', `${spec.id}-shorts`));
+      for (const file of files) console.log(`  ✓ ${file}`);
+      console.log('  next: npx tsx src/cli.ts build --spec <file> --voice kokoro');
+      break;
+    }
+
+    case 'distinct': {
+      if (!values.ids) usage();
+      const ids = values.ids.split(',').map((s) => s.trim()).filter(Boolean);
+      const hashes: Hash[] = [];
+      const hashDir = path.join(OUT, '_hashes');
+      for (const id of ids) {
+        const renderPath = path.join(PROJECTS, id, 'render.json');
+        if (!fs.existsSync(renderPath)) {
+          console.error(`no render.json for ${id} — run sheet for it first`);
+          process.exit(2);
+        }
+        const input = JSON.parse(fs.readFileSync(renderPath, 'utf8'));
+        hashes.push(await stillHashes(input, hashDir, 5));
+      }
+      const report = compareVariants(hashes);
+      fs.writeFileSync(path.join(OUT, '_hashes', 'distinctness.json'), JSON.stringify(report, null, 2));
+      console.table(report.pairs.map((p) => ({ a: p.a, b: p.b, distance: p.distance, structure: p.structureOnly, distinct: p.distinct })));
+      for (const advice of report.advice) console.log(`  ! ${advice}`);
+      console.log(report.pass ? '✓ distinct' : '✗ too similar');
+      process.exit(report.pass ? 0 : 4);
+      break;
+    }
+
+    case 'thumb': {
+      if (!values.spec) usage();
+      const spec = await readSpec(values.spec);
+      const input = JSON.parse(fs.readFileSync(path.join(projectDirFor(spec), 'render.json'), 'utf8'));
+      const thumb = await bestThumbnail(input, path.join(OUT, spec.id));
+      console.log(`✓ frame ${thumb.frame} (score ${thumb.score}) → ${thumb.jpg}`);
+      break;
+    }
+
+    case 'review': {
+      if (!values.spec) usage();
+      const spec = await readSpec(values.spec);
+      const dir = projectDirFor(spec);
+      const read = (name: string) => {
+        const file = path.join(dir, name);
+        return fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
+      };
+      const input = read('render.json');
+      const timing = read('timing.json');
+      const qa = read('qa.json');
+      if (!input || !timing || !qa) {
+        console.error('missing render/timing/qa — run build first');
+        process.exit(2);
+      }
+      const critique = read('critique.json');
+      const publish = read('publish.json');
+      const stillsDir = path.join(OUT, spec.id, 'stills');
+      const stills: string[] = [];
+      for (const frame of pickFrames(input.totalFrames, 6)) {
+        const file = path.join(stillsDir, `f${frame}.png`);
+        if (!fs.existsSync(file)) renderStill(input, frame, file);
+        stills.push(path.relative(path.join(OUT, spec.id), file));
+      }
+      const distinctness = values.distinct
+        ? compareVariants(
+            await Promise.all(
+              values.distinct.split(',').map(async (id) => {
+                const other = JSON.parse(fs.readFileSync(path.join(PROJECTS, id.trim(), 'render.json'), 'utf8'));
+                return stillHashes(other, path.join(OUT, '_hashes'), 4);
+              }),
+            ),
+          )
+        : undefined;
+      const outFile = path.join(OUT, spec.id, 'review.html');
+      writeReviewPage({
+        spec,
+        timing,
+        qa,
+        critique,
+        publish,
+        videoRelPath: 'video.mp4',
+        stillsRel: stills,
+        thumbRel: fs.existsSync(path.join(OUT, spec.id, 'thumb.jpg')) ? 'thumb.jpg' : undefined,
+        distinctness,
+        outFile,
+      });
+      console.log(`✓ ${outFile}`);
       break;
     }
 

@@ -13,6 +13,10 @@ export const VISUAL_TYPES = [
   'diagram',
   'split',
   'abstract',
+  'glitch',
+  'dot-grid',
+  'timeline',
+  'quote',
 ] as const;
 
 export const BEAT_ROLES = ['hook', 'tension', 'payoff', 'rehook', 'loop', 'cta'] as const;

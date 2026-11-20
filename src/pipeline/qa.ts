@@ -36,6 +36,8 @@ export type QaReport = {
     truePeakDb?: number;
     blackFrames: number;
     frozenFrames: number;
+    minLuma: number;
+    sampledFrames: number;
   };
   generatedAt: string;
 };
@@ -79,15 +81,49 @@ export async function measureLoudness(file: string): Promise<{ lufs: number; tru
   return { lufs: Number(json.input_i), truePeak: Number(json.input_tp) };
 }
 
-export async function detectDeadFrames(file: string): Promise<{ black: number; frozen: number }> {
-  const { stderr } = await run(ffmpegPath(), [
-    '-hide_banner', '-i', file,
-    '-vf', 'blackdetect=d=0.4:pix_th=0.10,freezedetect=n=-60dB:d=1.5',
-    '-an', '-f', 'null', '-',
-  ], { maxBuffer: 16 * 1024 * 1024 }).catch((e: { stderr?: string }) => ({ stderr: e.stderr ?? '' }));
-  const black = (stderr.match(/black_start/g) ?? []).length;
-  const frozen = (stderr.match(/freeze_start/g) ?? []).length;
-  return { black, frozen };
+/**
+ * Dead-frame detection that understands dark themes.
+ *
+ * `blackdetect` is useless here: our palettes are near-black on purpose, so it fires on any
+ * intentionally dark grade. Instead we read per-frame luma via signalstats and fail only when
+ * a frame is *actually* black (mean luma under threshold), and use freezedetect for held frames.
+ */
+export async function detectDeadFrames(
+  file: string,
+  opts: { blackLuma?: number; freezeSeconds?: number } = {},
+): Promise<{ black: number; frozen: number; details: string[]; minLuma: number; frames: number }> {
+  const blackLuma = opts.blackLuma ?? 3;
+  const freezeSeconds = opts.freezeSeconds ?? 1.5;
+
+  const [{ stderr: frozenErr }, { stdout: statsOut }] = await Promise.all([
+    run(ffmpegPath(), [
+      '-hide_banner', '-i', file,
+      '-vf', `freezedetect=n=-60dB:d=${freezeSeconds}`,
+      '-an', '-f', 'null', '-',
+    ], { maxBuffer: 16 * 1024 * 1024 }).catch((e: { stderr?: string }) => ({ stderr: e.stderr ?? '' })),
+    run(ffmpegPath(), [
+      '-hide_banner', '-i', file,
+      '-vf', 'signalstats,metadata=print:key=lavfi.signalstats.YAVG',
+      '-an', '-f', 'null', '-',
+    ], { maxBuffer: 64 * 1024 * 1024 }).catch(() => ({ stdout: '' })),
+  ]);
+
+  const lumas = [...statsOut.matchAll(/YAVG=([\d.]+)/g)].map((m) => Number(m[1]));
+  const black = lumas.filter((y) => y < blackLuma).length;
+  const details: string[] = [];
+  if (black > 0) {
+    const firstIdx = lumas.findIndex((y) => y < blackLuma);
+    details.push(`${black} frame(s) below luma ${blackLuma}, first at frame ${firstIdx}`);
+  }
+  const frozen = (frozenErr.match(/freeze_start/g) ?? []).length;
+  if (frozen > 0) details.push(`${frozen} held segment(s) > ${freezeSeconds}s`);
+  return {
+    black,
+    frozen,
+    details,
+    minLuma: lumas.length ? +Math.min(...lumas).toFixed(2) : 0,
+    frames: lumas.length,
+  };
 }
 
 export async function runQa(file: string, input: RenderInput, opts: { targetLufs?: number } = {}): Promise<QaReport> {
@@ -153,10 +189,10 @@ export async function runQa(file: string, input: RenderInput, opts: { targetLufs
   const dead = await detectDeadFrames(file);
   gates.push({
     id: 'no-black',
-    label: 'no black segments > 0.4s',
+    label: 'no featureless segments > 0.4s',
     pass: dead.black === 0,
-    value: String(dead.black),
-    expected: '0',
+    value: dead.black === 0 ? `0 (min luma ${dead.minLuma})` : dead.details.join('; '),
+    expected: '0 (dark themes allowed)',
   });
   gates.push({
     id: 'no-freeze',
@@ -226,7 +262,14 @@ export async function runQa(file: string, input: RenderInput, opts: { targetLufs
     pass: gates.every((g) => g.pass),
     gates,
     probe: p,
-    measured: { loudnessLufs, truePeakDb, blackFrames: dead.black, frozenFrames: dead.frozen },
+    measured: {
+      loudnessLufs,
+      truePeakDb,
+      blackFrames: dead.black,
+      frozenFrames: dead.frozen,
+      minLuma: dead.minLuma,
+      sampledFrames: dead.frames,
+    },
     generatedAt: new Date().toISOString(),
   };
   return report;

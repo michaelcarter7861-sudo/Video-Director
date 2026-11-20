@@ -36,7 +36,17 @@ export function kineticType(env: Env): void {
     ctx.fill();
   });
 
-  const size = fitSize(ctx, text, w - env.canvas.sideMargin * 2, h * (isHook ? 0.42 : 0.34), fonts.display.family, fonts.display.weight);
+  const captionTop = h * (1 - env.canvas.safeBottom) - Math.round(w * 0.046) * 1.9;
+  const blockTop = h * 0.33;
+  const label = fonts.uppercaseDisplay ? text.toUpperCase() : text;
+  const size = fitSize(
+    ctx,
+    label,
+    w - env.canvas.sideMargin * 2,
+    Math.max(120, captionTop - blockTop - 24),
+    fonts.display.family,
+    fonts.display.weight,
+  );
   const opts = {
     family: fonts.display.family,
     weight: fonts.display.weight,
@@ -48,11 +58,10 @@ export function kineticType(env: Env): void {
     uppercase: fonts.uppercaseDisplay,
   };
 
-  const label = fonts.uppercaseDisplay ? text.toUpperCase() : text;
   const { boxes, lineHeight } = layoutWords(ctx, label, {
     ...opts,
     x: env.canvas.sideMargin,
-    y: h * 0.34,
+    y: blockTop,
   });
 
   ctx.textBaseline = 'top';
@@ -160,13 +169,15 @@ export function fitSize(
   start = 260,
   min = 44,
 ): number {
+  // measured both axes: the widest *line* (not the whole string) and the wrapped block height
   let size = start;
   while (size > min) {
     const lines = wrapText(ctx, text, { family, weight, size, color: '#fff', maxWidth: maxW, lineHeight: 1.08 });
-    const blockH = lines.length * size * 1.08;
+    ctx.font = `${weight} ${size}px "${family}"`;
     const widest = Math.max(...lines.map((l) => ctx.measureText(l).width), 0);
+    const blockH = lines.length * size * 1.08;
     if (blockH <= maxH && widest <= maxW) return size;
-    size -= 6;
+    size -= 4;
   }
   return min;
 }

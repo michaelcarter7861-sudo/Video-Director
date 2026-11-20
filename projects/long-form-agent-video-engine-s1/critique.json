@@ -1,0 +1,28 @@
+{
+  "verdict": "ship",
+  "source": "rules",
+  "issues": [
+    {
+      "beatId": "promise",
+      "severity": "med",
+      "problem": "on-screen text repeats the voiceover verbatim"
+    },
+    {
+      "beatId": "loop",
+      "severity": "med",
+      "problem": "3 beats in a row feel like the same shot"
+    }
+  ],
+  "patches": [
+    {
+      "beatId": "promise",
+      "field": "onScreen",
+      "from": "Everything you are about to",
+      "to": "EVERYTHING YOU ARE",
+      "reason": "headline only — let the voice carry the sentence"
+    }
+  ],
+  "notes": [
+    "alternate text / data / motion families"
+  ]
+}

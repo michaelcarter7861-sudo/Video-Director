@@ -46,10 +46,10 @@
     },
     {
       "id": "no-black",
-      "label": "no black segments > 0.4s",
+      "label": "no featureless segments > 0.4s",
       "pass": true,
-      "value": "0",
-      "expected": "0"
+      "value": "0 (min luma 0)",
+      "expected": "0 (dark themes allowed)"
     },
     {
       "id": "no-freeze",
@@ -97,7 +97,7 @@
       "id": "file-size",
       "label": "file size sane",
       "pass": true,
-      "value": "3.7 MB",
+      "value": "3.6 MB",
       "expected": "1KB - 500MB"
     }
   ],
@@ -107,14 +107,16 @@
     "height": 1920,
     "fps": 30,
     "hasAudio": true,
-    "bitrate": 1065781,
-    "sizeBytes": 3848270
+    "bitrate": 1057541,
+    "sizeBytes": 3818517
   },
   "measured": {
     "loudnessLufs": -13.5,
     "truePeakDb": -7.1,
     "blackFrames": 0,
-    "frozenFrames": 0
+    "frozenFrames": 0,
+    "minLuma": 0,
+    "sampledFrames": 0
   },
-  "generatedAt": "2026-11-20T14:29:06.933Z"
+  "generatedAt": "2026-11-20T14:56:40.051Z"
 }

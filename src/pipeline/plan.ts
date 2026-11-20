@@ -82,7 +82,17 @@ export function deriveVisualPayloads(spec: Director): Director {
         }
         break;
       case 'abstract':
+      case 'dot-grid':
         v.seed = v.seed ?? (i + 1) * 7919;
+        break;
+      case 'timeline':
+        if (!v.nodes || v.nodes.length === 0) {
+          v.nodes = words.length >= 3 ? words.slice(0, 3) : ['then', 'now', 'next'];
+        }
+        break;
+      case 'quote':
+        if (!v.left) v.left = beat.onScreen || beat.vo.slice(0, 120);
+        if (!v.right) v.right = beat.emphasis[0] ?? 'source';
         break;
       default:
         break;

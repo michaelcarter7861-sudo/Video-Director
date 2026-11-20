@@ -45,7 +45,7 @@
       "id": "hook",
       "role": "hook",
       "vo": "Stop introducing your video.",
-      "onScreen": "YOUR FIRST 2 SECONDS",
+      "onScreen": "Stop introducing your video",
       "emphasis": [
         "2",
         "LYING"

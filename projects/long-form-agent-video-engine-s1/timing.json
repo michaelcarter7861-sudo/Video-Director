@@ -1,0 +1,65 @@
+{
+  "targetSec": 36.4,
+  "actualSec": 31.8,
+  "beats": [
+    {
+      "id": "promise",
+      "requestedMaxSec": 3.4,
+      "measuredMs": 3327,
+      "finalSec": 3.333,
+      "capped": false
+    },
+    {
+      "id": "chapter-1",
+      "requestedMaxSec": 4.5,
+      "measuredMs": 3690,
+      "finalSec": 3.7,
+      "capped": false
+    },
+    {
+      "id": "spec-code",
+      "requestedMaxSec": 6,
+      "measuredMs": 5523,
+      "finalSec": 5.533,
+      "capped": false
+    },
+    {
+      "id": "chapter-2",
+      "requestedMaxSec": 4.5,
+      "measuredMs": 3326,
+      "finalSec": 3.333,
+      "capped": false
+    },
+    {
+      "id": "proof",
+      "requestedMaxSec": 5,
+      "measuredMs": 4055,
+      "finalSec": 4.067,
+      "capped": false
+    },
+    {
+      "id": "chapter-3",
+      "requestedMaxSec": 5,
+      "measuredMs": 4792,
+      "finalSec": 4.8,
+      "capped": false
+    },
+    {
+      "id": "loop",
+      "requestedMaxSec": 5,
+      "measuredMs": 5156,
+      "finalSec": 5.167,
+      "capped": true
+    },
+    {
+      "id": "loop",
+      "requestedMaxSec": 3,
+      "measuredMs": 1862,
+      "finalSec": 1.867,
+      "capped": false
+    }
+  ],
+  "warnings": [
+    "beat loop: audio is 5.16s but maxSec was 5s — kept the audio, duration extended"
+  ]
+}

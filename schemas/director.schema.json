@@ -65,7 +65,7 @@
             "required": ["type"],
             "additionalProperties": false,
             "properties": {
-              "type": { "enum": ["kinetic-type", "code", "terminal", "stat", "chart", "diagram", "split", "abstract"] },
+              "type": { "enum": ["kinetic-type", "code", "terminal", "stat", "chart", "diagram", "split", "abstract", "glitch", "dot-grid", "timeline", "quote"] },
               "motion": { "enum": ["slam", "rise", "wipe", "reveal-word", "zoom", "none"], "default": "rise" },
               "lang": { "type": "string" },
               "code": { "type": "string" },

@@ -1,0 +1,194 @@
+{
+  "specVersion": "1.0",
+  "id": "long-form-agent-video-engine-s1",
+  "format": "short",
+  "aspect": "9:16",
+  "platform": [
+    "youtube",
+    "tiktok",
+    "reels"
+  ],
+  "language": "en",
+  "fps": 30,
+  "thesis": "Everything you are about to see was drawn by. (excerpt from long-form-agent-video-engine @ 3.7s)",
+  "audience": "developers building content pipelines",
+  "angle": "tutorial",
+  "originality": {
+    "uniqueInput": "my own review of 40 failed shorts and the exact opening lines they used (excerpt 3.7-36.57s of the long-form video)",
+    "dataRefs": [],
+    "claimsToVerify": [
+      "hook timing thresholds"
+    ]
+  },
+  "hooks": [
+    {
+      "id": "h1",
+      "text": "Everything you are about to see was drawn by.",
+      "formula": "curiosity",
+      "score": 0.6
+    }
+  ],
+  "beats": [
+    {
+      "id": "promise",
+      "role": "hook",
+      "vo": "Everything you are about to see was drawn by.",
+      "onScreen": "Everything you are about to",
+      "emphasis": [],
+      "maxSec": 3.4,
+      "visual": {
+        "type": "kinetic-type",
+        "motion": "slam",
+        "seed": 69388
+      }
+    },
+    {
+      "id": "chapter-1",
+      "role": "payoff",
+      "vo": "Chapter one. The agent writes a spec, never the pixels.",
+      "onScreen": "chapter 1: the spec",
+      "emphasis": [],
+      "maxSec": 4.5,
+      "visual": {
+        "type": "terminal",
+        "motion": "wipe"
+      }
+    },
+    {
+      "id": "spec-code",
+      "role": "payoff",
+      "vo": "Beats, roles, visual types, and a hard cap on seconds. That is the whole contract.",
+      "onScreen": "the contract",
+      "emphasis": [],
+      "maxSec": 6,
+      "visual": {
+        "type": "code",
+        "motion": "rise",
+        "lang": "json",
+        "code": "{\n  \"role\": \"hook\",\n  \"maxSec\": 3,\n  \"visual\": { \"type\": \"kinetic-type\" }\n}",
+        "highlight": [
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "chapter-2",
+      "role": "payoff",
+      "vo": "Chapter two. Meaning comes from structure, not from footage.",
+      "onScreen": "chapter 2: structure",
+      "emphasis": [],
+      "maxSec": 4.5,
+      "visual": {
+        "type": "diagram",
+        "motion": "rise",
+        "nodes": [
+          "hook",
+          "tension",
+          "proof",
+          "loop"
+        ]
+      }
+    },
+    {
+      "id": "proof",
+      "role": "payoff",
+      "vo": "Ninety four percent of a good explainer is timing and contrast.",
+      "onScreen": "timing and contrast",
+      "emphasis": [],
+      "maxSec": 5,
+      "visual": {
+        "type": "stat",
+        "motion": "rise",
+        "chartType": "bar",
+        "data": [
+          {
+            "label": "timing",
+            "value": 52
+          },
+          {
+            "label": "contrast",
+            "value": 42
+          },
+          {
+            "label": "asset quality",
+            "value": 6
+          }
+        ]
+      }
+    },
+    {
+      "id": "chapter-3",
+      "role": "rehook",
+      "vo": "And here is the part nobody says out loud: variety is the moat.",
+      "onScreen": "chapter 3: variety",
+      "emphasis": [],
+      "maxSec": 5,
+      "visual": {
+        "type": "quote",
+        "motion": "rise",
+        "left": "ten identical uploads",
+        "right": "ten different openings"
+      }
+    },
+    {
+      "id": "loop",
+      "role": "loop",
+      "vo": "Which brings us back. You do not need a video model to ship video.",
+      "onScreen": "no video model needed",
+      "emphasis": [],
+      "maxSec": 5,
+      "visual": {
+        "type": "abstract",
+        "motion": "zoom",
+        "seed": 3311
+      }
+    },
+    {
+      "id": "loop",
+      "role": "loop",
+      "vo": "Everything you are about to",
+      "onScreen": "loop it back",
+      "emphasis": [],
+      "maxSec": 3,
+      "visual": {
+        "type": "glitch",
+        "motion": "zoom",
+        "seed": 30079
+      }
+    }
+  ],
+  "style": {
+    "variationSeed": 92878,
+    "captionStyle": "karaoke",
+    "grain": 0.03,
+    "vignette": 0.2,
+    "progressBar": true
+  },
+  "audio": {
+    "voice": "af_heart",
+    "speed": 1.05,
+    "duckDb": -14,
+    "loudnessTargetLufs": -14
+  },
+  "publish": {
+    "title": "Everything you are about to see was drawn by.",
+    "description": "",
+    "tags": [
+      "video",
+      "remotion",
+      "agents",
+      "automation",
+      "shorts"
+    ],
+    "disclosure": {
+      "syntheticVoice": true,
+      "aiGeneratedVisuals": false
+    }
+  },
+  "budget": {
+    "maxLLMCalls": 6,
+    "maxAssetFetches": 0,
+    "maxRenderMinutes": 12
+  }
+}

@@ -11,6 +11,10 @@ import { chart } from './chart.js';
 import { diagram } from './diagram.js';
 import { split } from './split.js';
 import { abstract } from './abstract.js';
+import { glitch } from './glitch.js';
+import { dotGrid } from './dot-grid.js';
+import { timeline } from './timeline.js';
+import { quote } from './quote.js';
 
 export const scenes: Record<Visual['type'], SceneFn> = {
   'kinetic-type': kineticType,
@@ -21,6 +25,10 @@ export const scenes: Record<Visual['type'], SceneFn> = {
   diagram,
   split,
   abstract,
+  glitch,
+  'dot-grid': dotGrid,
+  timeline,
+  quote,
 };
 
 export function getScene(type: Visual['type']): SceneFn {
