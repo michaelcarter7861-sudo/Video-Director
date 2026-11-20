@@ -47,7 +47,7 @@ Working end-to-end. Phases 1–4 of `docs/02-PLAN.md` are shipped:
 - **Dashboard**: `out/dashboard.html` — every project with QA, critic, views, retention
 - **OpenFilm handoff**: export a spec as an editable Studio project (MIT, `github.com/openfilm/openfilm`)
 - Every `build` now emits critic + thumbnail + review page automatically
-- 35 tests (determinism, validation, captions, timing, schema parity, scenes, critic, distinctness, shorts)
+- 37 tests (determinism, validation, captions, timing, schema parity, scenes, critic, distinctness, shorts, MP4-only artifacts)
 
 ## Quick start
 
@@ -122,6 +122,13 @@ voice    --text "<line>"                      probe the TTS chain
 qa       --spec <file> --file <mp4>           re-run gates on an existing render
 inspect  <file.mp4>                           probe any video
 ```
+
+## GitHub Actions: downloadable videos
+
+Run **Actions → Render video → Run workflow** for one spec, or **Actions → publish-batch → Run workflow**
+for variants / hook A/B. When the job finishes, download the `videos-<run>` or `batch-videos-<run>` artifact.
+The artifact archive contains **MP4 videos only** (flattened `<video-id>.mp4` names)—no HTML, source
+specs, contact sheets, or code. Workflow logs still show QA and ffprobe evidence.
 
 ## The contract
 

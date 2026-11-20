@@ -81,7 +81,10 @@ in the OpenFilm pages. The MP4 from our engine stays the reference render.
 ## CI
 
 `.github/workflows/publish-batch.yml` — `workflow_dispatch` with `spec`/`count`/`hooks`/`voice`:
-typecheck + tests → batch → distinctness gate → dashboard → ffprobe evidence → artifact upload
-(videos, thumbs, sheets, review pages, qa/critique/publish JSON, log) → job summary.
+typecheck + tests → full-resolution batch renders → distinctness check → ffprobe evidence →
+**MP4-only artifact** (`videos-<run>`). The workflow may create review/dashboard HTML and JSON on the
+runner, but these are not included in the downloadable artifact. `render.yml` follows the same rule:
+its artifact contains only flattened `<video-id>.mp4` files.
 
-Nothing is auto-published. A human opens `out/dashboard.html` and approves.
+Nothing is auto-published to a social platform. Download the `videos-<run>` artifact from the run's
+Actions page; the artifact archive contains only playable MP4s, not source code or HTML.

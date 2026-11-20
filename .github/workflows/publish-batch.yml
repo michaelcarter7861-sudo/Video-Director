@@ -1,28 +1,27 @@
 name: publish-batch
 
-# One spec in, a reviewed batch out: variants, distinctness gate, hook A/B slots,
-# QA on every file, dashboard, and a downloadable artifact set.
-# Nothing is uploaded to a platform here — a human approves from review.html first.
+# Render a variant or hook batch, then publish MP4 files only as a downloadable artifact.
+# HTML review pages, source specs and code remain internal to the runner and are not uploaded.
 
 on:
   workflow_dispatch:
     inputs:
       spec:
-        description: 'Spec file to batch'
+        description: "Spec file to batch"
         required: true
-        default: 'examples/demo/director.json'
+        default: "examples/demo/director.json"
       count:
-        description: 'Variants (1-6)'
+        description: "Variants / hooks (1-6)"
         required: true
-        default: '3'
+        default: "3"
       hooks:
-        description: 'Render hook A/B slots instead of variants'
+        description: "Render hook A/B slots instead of visual variants"
         type: boolean
         default: false
       voice:
-        description: 'dummy | kokoro | auto'
+        description: "dummy | kokoro | freeapi | auto"
         required: true
-        default: 'dummy'
+        default: "dummy"
 
 concurrency:
   group: publish-batch-${{ github.ref }}
@@ -39,60 +38,70 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: typecheck + tests
+      - name: Typecheck and tests
         run: |
           npx tsc --noEmit
           npm test
-
-      - name: batch
-        id: batch
+      - name: Render batch
+        env:
+          SPEC: ${{ inputs.spec }}
+          COUNT: ${{ inputs.count }}
+          HOOKS: ${{ inputs.hooks }}
+          VOICE: ${{ inputs.voice }}
         run: |
           set -o pipefail
-          if [ "${{ inputs.hooks }}" = "true" ]; then
-            npx tsx src/cli.ts hooks --spec "${{ inputs.spec }}" --count "${{ inputs.count }}" --render --voice "${{ inputs.voice }}" | tee batch.log
+          if [ "$HOOKS" = "true" ]; then
+            npx tsx src/cli.ts hooks --spec "$SPEC" --count "$COUNT" --render --voice "$VOICE" | tee batch.log
           else
-            npx tsx src/cli.ts variants --spec "${{ inputs.spec }}" --count "${{ inputs.count }}" --voice "${{ inputs.voice }}" | tee batch.log
+            npx tsx src/cli.ts variants --spec "$SPEC" --count "$COUNT" --render --voice "$VOICE" | tee batch.log
           fi
-
-      - name: distinctness gate (variants only)
+      - name: Distinctness check (variants only)
         if: ${{ inputs.hooks == false }}
+        continue-on-error: true
+        env:
+          SPEC: ${{ inputs.spec }}
+          COUNT: ${{ inputs.count }}
         run: |
-          IDS=$(node -e "const s=require('./${{ inputs.spec }}');process.stdout.write(Array.from({length:+process.env.COUNT},(_,i)=>s.id+'-v'+(i+1)).join(','))" COUNT=${{ inputs.count }} 2>/dev/null || true)
-          if [ -n "$IDS" ]; then npx tsx src/cli.ts distinct --ids "$IDS" | tee -a batch.log || echo "::warning::batch too similar — see advice above"; fi
-
-      - name: dashboard
-        run: npx tsx src/cli.ts dashboard | tee -a batch.log
-
-      - name: evidence
+          IDS=$(node --input-type=module -e 'import fs from "node:fs";const s=JSON.parse(fs.readFileSync(process.env.SPEC,"utf8"));process.stdout.write(Array.from({length:+process.env.COUNT},(_,i)=>s.id+"-v"+(i+1)).join(","))')
+          npx tsx src/cli.ts distinct --ids "$IDS" | tee -a batch.log
+      - name: Evidence
+        if: always()
         run: |
           for f in out/*/video.mp4; do
             [ -f "$f" ] || continue
             echo "== $f" >> batch.log
             ffprobe -v error -show_entries format=duration,size:stream=codec_name,width,height,r_frame_rate -of default=nw=1 "$f" >> batch.log
           done
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: batch-${{ github.run_number }}
-          path: |
-            out/**/video.mp4
-            out/**/thumb.jpg
-            out/**/contact-sheet.png
-            out/dashboard.html
-            out/*/review.html
-            projects/**/qa.json
-            projects/**/critique.json
-            projects/**/publish.json
-            batch.log
-          retention-days: 14
-          if-no-files-found: warn
-
-      - name: summary
+      - name: Collect MP4 files only
+        if: always()
+        shell: bash
         run: |
+          mkdir -p artifact/videos
+          while IFS= read -r -d '' file; do
+            relative="${file#out/}"
+            id="${relative%/video.mp4}"
+            name="${id//\//-}"
+            cp "$file" "artifact/videos/${name}.mp4"
+          done < <(find out -type f -name 'video.mp4' -print0 2>/dev/null || true)
+          echo "Videos staged: $(find artifact/videos -maxdepth 1 -name '*.mp4' | wc -l)"
+      - name: Upload videos (MP4 only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-videos-${{ github.run_number }}
+          path: artifact/videos/*.mp4
+          if-no-files-found: warn
+          retention-days: 14
+          compression-level: 0
+      - name: Summary
+        if: always()
+        run: |
+          count=$(find artifact/videos -maxdepth 1 -name '*.mp4' | wc -l)
           {
-            echo "## Batch result"
+            echo "## Video artifact"
+            echo "${count} MP4 file(s) in artifact **batch-videos-${{ github.run_number }}**."
+            echo "Artifact contents are video files only — no HTML, source specs, or code."
             echo '```'
-            tail -n 40 batch.log
+            tail -n 40 batch.log 2>/dev/null || true
             echo '```'
-            echo "Open \`out/dashboard.html\` from the artifact to approve or reject each video."
           } >> "$GITHUB_STEP_SUMMARY"

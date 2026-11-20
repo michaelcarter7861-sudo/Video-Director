@@ -39,7 +39,7 @@ function usage(): never {
 video-director — deterministic video engine (no Remotion, no video model)
 
   spec    --brief <file>  [--out <file>]             validate a director.json (agent writes it)
-  variants --spec <file> [--count N] [--draft]        one spec -> N visibly different videos
+  variants --spec <file> [--count N] [--draft|--render] one spec -> N visibly different videos
   critique --spec <file> [--llm]                     rules critic (+ optional Claude Code pass)
   shorts   --spec <long.json> [--count N]            long-form -> N vertical shorts (re-directed)
   distinct --ids a,b,c                               aHash distinctness gate across built variants
@@ -301,10 +301,23 @@ async function main() {
         const withPayloads = deriveVisualPayloads(variantSpec);
         const built = await buildProject(withPayloads, { projectDir: dir, voice: (values.voice as PreferProvider) ?? 'dummy' });
         fs.writeFileSync(path.join(dir, 'render.json'), JSON.stringify(built.renderInput, null, 2));
-        const sheet = path.join(OUT, variantSpec.id, 'contact-sheet.png');
+        const outDir = path.join(OUT, variantSpec.id);
+        const sheet = path.join(outDir, 'contact-sheet.png');
         renderContactSheet(built.renderInput, sheet);
-        if (values.draft) {
-          const out = path.join(OUT, variantSpec.id, 'draft.mp4');
+        if (values.render) {
+          fs.mkdirSync(outDir, { recursive: true });
+          const raw = path.join(outDir, 'raw.mp4');
+          await renderVideo(built.renderInput, { outFile: raw, quality: 'final' });
+          const video = path.join(outDir, 'video.mp4');
+          await normalizeLoudness(raw, video, withPayloads.audio.loudnessTargetLufs);
+          fs.rmSync(raw, { force: true });
+          const qa = await runQa(video, built.renderInput, { targetLufs: withPayloads.audio.loudnessTargetLufs });
+          fs.writeFileSync(path.join(dir, 'timing.json'), JSON.stringify(built.report, null, 2));
+          fs.writeFileSync(path.join(dir, 'qa.json'), JSON.stringify(qa, null, 2));
+          console.log(`  ${qa.pass ? '✓' : '!'} ${variantSpec.id} QA ${qa.pass ? 'PASS' : 'FAIL'} → ${video}`);
+        } else if (values.draft) {
+          fs.mkdirSync(outDir, { recursive: true });
+          const out = path.join(outDir, 'draft.mp4');
           await renderVideo(built.renderInput, { outFile: out, quality: 'draft' });
           console.log(`  ✓ ${variantSpec.id} → ${out}`);
         } else {

@@ -14,7 +14,7 @@ Written 2026-11-20, after Phase 4b. This is the answer to "kitna kaam rehta hai"
 | — | OpenFilm export + skill (human editing handoff) | done |
 | — | CI: test job, render job, publish-batch job, Kokoro compose | done |
 
-35 tests, `tsc --noEmit` clean, every demo/long/showcase/shorts/A-B render QA PASS.
+37 tests, `tsc --noEmit` clean, every demo/long/showcase/shorts/A-B render QA PASS.
 
 ## Remaining, in the order that actually unblocks value
 
