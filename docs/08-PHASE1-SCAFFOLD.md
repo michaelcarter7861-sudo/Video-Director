@@ -1,4 +1,8 @@
-# 08 — PHASE 1 SCAFFOLD PLAN (tech niche · motion-graphics)
+# 08 — PHASE 1 SCAFFOLD (tech niche · motion-graphics) — **SHIPPED**
+
+> **Status: implemented.** The renderer is **not Remotion** — it is an MIT `@napi-rs/canvas` + ffmpeg
+> compositor (no browser, no licence). See `docs/09-ENGINE-DECISION.md` for the decision record.
+> Deliverables below were adjusted accordingly; everything else stands.
 
 > Aapne choose kiya: **tech/AI explainers · motion-graphics/kinetic-type · full Phase 1 scaffold**.
 > Ye document batata hai **kya banega, kis order mein, aur kya accept karne ka criteria hai.** Filhaal code nahi — ye build order hai jo agle step mein implement hoga.
@@ -10,7 +14,7 @@
 
 | Concern | Choice | Why |
 |---|---|---|
-| Engine | Remotion 4.x + React 19 + TypeScript (strict) | determinism, agent skills, ecosystem |
+| Engine | `@napi-rs/canvas` + `ffmpeg` (static binaries) + TypeScript (strict) | **MIT**, no browser, byte-identical frames |
 | Validation | zod (runtime) + JSON Schema (agent ke liye) | ek hi source, do audiences |
 | TTS | Kokoro-FastAPI (docker, CPU) | free, per-word timestamps |
 | Alignment fallback | `@remotion/install-whisper-cpp` (medium.en) | drift correction |

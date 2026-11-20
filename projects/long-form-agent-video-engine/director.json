@@ -1,0 +1,199 @@
+{
+  "specVersion": "1.0",
+  "id": "long-form-agent-video-engine",
+  "format": "long",
+  "aspect": "16:9",
+  "platform": [
+    "youtube",
+    "tiktok",
+    "reels"
+  ],
+  "language": "en",
+  "fps": 30,
+  "thesis": "Directing with an agent and rendering with deterministic code gives you volume without the template look.",
+  "audience": "developers building content pipelines",
+  "angle": "tutorial",
+  "originality": {
+    "uniqueInput": "my own review of 40 failed shorts and the exact opening lines they used",
+    "dataRefs": [],
+    "claimsToVerify": [
+      "hook timing thresholds"
+    ]
+  },
+  "hooks": [
+    {
+      "id": "h1",
+      "text": "You do not need a video model to ship video.",
+      "formula": "contrarian",
+      "score": 0.8
+    }
+  ],
+  "beats": [
+    {
+      "id": "cold-open",
+      "role": "hook",
+      "vo": "You do not need a video model to ship video.",
+      "onScreen": "no video model needed",
+      "emphasis": [
+        "no video model"
+      ],
+      "maxSec": 3.5,
+      "visual": {
+        "type": "kinetic-type",
+        "motion": "slam"
+      }
+    },
+    {
+      "id": "promise",
+      "role": "tension",
+      "vo": "Everything you are about to see was drawn by code, from a JSON file an agent wrote.",
+      "onScreen": "code drew this",
+      "emphasis": [],
+      "maxSec": 5,
+      "visual": {
+        "type": "terminal",
+        "motion": "rise",
+        "lines": [
+          "$ npx tsx src/cli.ts build --spec director.json",
+          "✓ 887 frames rendered",
+          "✓ qa: PASS"
+        ]
+      }
+    },
+    {
+      "id": "chapter-1",
+      "role": "payoff",
+      "vo": "Chapter one. The agent writes a spec, never the pixels.",
+      "onScreen": "chapter 1: the spec",
+      "emphasis": [],
+      "maxSec": 4.5,
+      "visual": {
+        "type": "kinetic-type",
+        "motion": "wipe"
+      }
+    },
+    {
+      "id": "spec-code",
+      "role": "payoff",
+      "vo": "Beats, roles, visual types, and a hard cap on seconds. That is the whole contract.",
+      "onScreen": "the contract",
+      "emphasis": [],
+      "maxSec": 6,
+      "visual": {
+        "type": "code",
+        "motion": "rise",
+        "lang": "json",
+        "code": "{\n  \"role\": \"hook\",\n  \"maxSec\": 3,\n  \"visual\": { \"type\": \"kinetic-type\" }\n}",
+        "highlight": [
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "chapter-2",
+      "role": "payoff",
+      "vo": "Chapter two. Meaning comes from structure, not from footage.",
+      "onScreen": "chapter 2: structure",
+      "emphasis": [],
+      "maxSec": 4.5,
+      "visual": {
+        "type": "diagram",
+        "motion": "rise",
+        "nodes": [
+          "hook",
+          "tension",
+          "proof",
+          "loop"
+        ]
+      }
+    },
+    {
+      "id": "proof",
+      "role": "payoff",
+      "vo": "Ninety four percent of a good explainer is timing and contrast.",
+      "onScreen": "timing and contrast",
+      "emphasis": [],
+      "maxSec": 5,
+      "visual": {
+        "type": "chart",
+        "motion": "rise",
+        "chartType": "bar",
+        "data": [
+          {
+            "label": "timing",
+            "value": 52
+          },
+          {
+            "label": "contrast",
+            "value": 42
+          },
+          {
+            "label": "asset quality",
+            "value": 6
+          }
+        ]
+      }
+    },
+    {
+      "id": "chapter-3",
+      "role": "rehook",
+      "vo": "And here is the part nobody says out loud: variety is the moat.",
+      "onScreen": "chapter 3: variety",
+      "emphasis": [],
+      "maxSec": 5,
+      "visual": {
+        "type": "split",
+        "motion": "rise",
+        "left": "ten identical uploads",
+        "right": "ten different openings"
+      }
+    },
+    {
+      "id": "loop",
+      "role": "loop",
+      "vo": "Which brings us back. You do not need a video model to ship video.",
+      "onScreen": "no video model needed",
+      "emphasis": [],
+      "maxSec": 5,
+      "visual": {
+        "type": "abstract",
+        "motion": "zoom",
+        "seed": 3311
+      }
+    }
+  ],
+  "style": {
+    "templateFamily": "data-story",
+    "variationSeed": 331,
+    "captionStyle": "line",
+    "grain": 0.03,
+    "vignette": 0.2,
+    "progressBar": true
+  },
+  "audio": {
+    "voice": "af_heart",
+    "speed": 1.05,
+    "duckDb": -14,
+    "loudnessTargetLufs": -14
+  },
+  "publish": {
+    "title": "You do not need a video model to ship video",
+    "description": "",
+    "tags": [
+      "video",
+      "remotion",
+      "agents",
+      "automation"
+    ],
+    "disclosure": {
+      "syntheticVoice": true,
+      "aiGeneratedVisuals": false
+    }
+  },
+  "budget": {
+    "maxLLMCalls": 6,
+    "maxAssetFetches": 0,
+    "maxRenderMinutes": 12
+  }
+}

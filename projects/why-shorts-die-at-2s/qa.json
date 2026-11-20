@@ -1,0 +1,120 @@
+{
+  "file": "/home/user/Video-Director/out/why-shorts-die-at-2s/video.mp4",
+  "pass": true,
+  "gates": [
+    {
+      "id": "duration",
+      "label": "duration matches timeline",
+      "pass": true,
+      "value": "28.89s",
+      "expected": "28.83s ±0.25"
+    },
+    {
+      "id": "resolution",
+      "label": "resolution",
+      "pass": true,
+      "value": "1080x1920",
+      "expected": "1080x1920"
+    },
+    {
+      "id": "fps",
+      "label": "frame rate",
+      "pass": true,
+      "value": "30",
+      "expected": "30"
+    },
+    {
+      "id": "audio",
+      "label": "audio stream present",
+      "pass": true,
+      "value": "yes",
+      "expected": "yes"
+    },
+    {
+      "id": "loudness",
+      "label": "integrated loudness",
+      "pass": true,
+      "value": "-13.5 LUFS",
+      "expected": "-14 ±2.5 LUFS"
+    },
+    {
+      "id": "true-peak",
+      "label": "true peak",
+      "pass": true,
+      "value": "-7.1 dBTP",
+      "expected": "<= -0.5 dBTP"
+    },
+    {
+      "id": "no-black",
+      "label": "no black segments > 0.4s",
+      "pass": true,
+      "value": "0",
+      "expected": "0"
+    },
+    {
+      "id": "no-freeze",
+      "label": "no frozen segments > 1.5s",
+      "pass": true,
+      "value": "0",
+      "expected": "0"
+    },
+    {
+      "id": "onscreen-length",
+      "label": "on-screen text <= 5 words",
+      "pass": true,
+      "value": "0 beats over",
+      "expected": "0 beats"
+    },
+    {
+      "id": "hook-starts-at-zero",
+      "label": "hook is the first frame",
+      "pass": true,
+      "value": "starts f0",
+      "expected": "f0"
+    },
+    {
+      "id": "hook-speaks-early",
+      "label": "first hook word before 0.9s",
+      "pass": true,
+      "value": "0ms",
+      "expected": "<= 900ms"
+    },
+    {
+      "id": "hook-short",
+      "label": "hook beat <= 4.0s",
+      "pass": true,
+      "value": "2.23s",
+      "expected": "<= 4.00s"
+    },
+    {
+      "id": "visual-change",
+      "label": "no repeated consecutive visual",
+      "pass": true,
+      "value": "0 repeats",
+      "expected": "0"
+    },
+    {
+      "id": "file-size",
+      "label": "file size sane",
+      "pass": true,
+      "value": "3.7 MB",
+      "expected": "1KB - 500MB"
+    }
+  ],
+  "probe": {
+    "durationSec": 28.886,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "hasAudio": true,
+    "bitrate": 1065781,
+    "sizeBytes": 3848270
+  },
+  "measured": {
+    "loudnessLufs": -13.5,
+    "truePeakDb": -7.1,
+    "blackFrames": 0,
+    "frozenFrames": 0
+  },
+  "generatedAt": "2026-11-20T14:29:06.933Z"
+}

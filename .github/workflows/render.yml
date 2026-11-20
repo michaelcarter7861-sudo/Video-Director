@@ -1,0 +1,70 @@
+name: render
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: 'Path to director.json'
+        required: true
+        default: 'examples/demo/director.json'
+      voice:
+        description: 'TTS provider (auto|kokoro|freeapi|macos|dummy)'
+        required: true
+        default: 'dummy'
+      music_bed:
+        description: 'Generate a royalty-free music bed'
+        type: boolean
+        default: true
+  push:
+    branches: [main]
+    paths:
+      - 'schemas/**'
+      - 'src/**'
+      - 'examples/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm test
+
+  render:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Render
+        run: |
+          node --import tsx src/cli.ts build \
+            --spec "${{ github.event.inputs.spec || 'examples/demo/director.json' }}" \
+            --voice "${{ github.event.inputs.voice || 'dummy' }}" \
+            ${{ github.event.inputs.music_bed == 'true' && '--music-bed' || '' }}
+      - name: Upload video + evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: render
+          path: |
+            out/**/video.mp4
+            out/**/contact-sheet.png
+            out/**/thumb.png
+            projects/**/director.json
+            projects/**/qa.json
+            projects/**/timing.json
+            projects/**/publish.json
+            projects/**/manifest.json
+            projects/**/captions.srt
+          if-no-files-found: error
+          retention-days: 14

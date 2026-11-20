@@ -1,0 +1,75 @@
+{
+  "id": "long-form-agent-video-engine",
+  "titleVariants": [
+    "Directing with an agent and rendering with deterministic code gives you volume without the…",
+    "You do not need a video model to ship video. — Directing with an agent and rendering with d…",
+    "Which brings us back. You do not need a video model to ship video."
+  ],
+  "description": "Directing with an agent and rendering with deterministic code gives you volume without the template look.\n\nWhat is in this video:\n1. no video model needed\n2. code drew this\n3. chapter 1: the spec\n4. the contract\n5. chapter 2: structure\n6. timing and contrast\n7. chapter 3: variety\n8. no video model needed\n\nAngle: tutorial · Audience: developers building content pipelines\nBased on: my own review of 40 failed shorts and the exact opening lines they used\n\n\nVoice: synthetic (af_heart). Visuals: programmatically rendered.\n#shorts #buildinpublic",
+  "tags": [
+    "video",
+    "remotion",
+    "agents",
+    "automation",
+    "directing",
+    "agent",
+    "rendering",
+    "deterministic",
+    "code",
+    "gives",
+    "volume",
+    "without",
+    "template",
+    "look",
+    "need"
+  ],
+  "hashtags": [
+    "#video",
+    "#remotion",
+    "#agents",
+    "#automation",
+    "#directing"
+  ],
+  "disclosure": {
+    "syntheticVoice": true,
+    "aiGeneratedVisuals": false
+  },
+  "thumbnailFrame": 0,
+  "licenses": [
+    {
+      "asset": "Inter",
+      "kind": "font",
+      "source": "npm @fontsource/inter",
+      "license": "OFL-1.1",
+      "attribution": "Rasmus Andersson"
+    },
+    {
+      "asset": "Space Grotesk",
+      "kind": "font",
+      "source": "npm @fontsource/space-grotesk",
+      "license": "OFL-1.1",
+      "attribution": "Florian Karsten"
+    },
+    {
+      "asset": "JetBrains Mono",
+      "kind": "font",
+      "source": "npm @fontsource/jetbrains-mono",
+      "license": "OFL-1.1",
+      "attribution": "JetBrains"
+    },
+    {
+      "asset": "voiceover",
+      "kind": "audio",
+      "source": "tts:af_heart",
+      "license": "model-dependent (Kokoro-82M = Apache-2.0)",
+      "attribution": "Synthetic voice generated locally"
+    },
+    {
+      "asset": "renderer",
+      "kind": "code",
+      "source": "video-director (this repo) / @napi-rs/canvas / ffmpeg (LGPL build)",
+      "license": "MIT / MIT / LGPL-2.1+",
+      "attribution": "Programmatic rendering — no stock footage used"
+    }
+  ]
+}

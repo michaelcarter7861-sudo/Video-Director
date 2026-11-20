@@ -12,7 +12,7 @@
 | D2 | **Primary platform/format** | Shorts-first ya Long-first | **Short-first** (fast feedback loop), phir long |
 | D3 | **Language** | English / Urdu / bilingual | **English primary** (TTS quality + monetization), Urdu Phase 3 |
 | D4 | **Channel model** | faceless brand / personal brand / client work | **faceless brand** + brand token layer (multi-channel later) |
-| D5 | **Remotion license status** | solo (free) / team 4+ (paid) | solo → free; agar barhe toh budget line banaye rakho |
+| D5 | **Engine choice** | Remotion / MIT canvas renderer | ✅ **MIT canvas renderer** (`@napi-rs/canvas` + ffmpeg) — dekho `docs/09-ENGINE-DECISION.md` |
 | D6 | **Where renders run** | local laptop / GitHub Actions / VPS | **local for drafts, GitHub Actions for finals** |
 | D7 | **Agent autonomy level** | full bypass / allowlist+deny / interactive | **allowlist + `dontAsk` + deny** (aapka "always yes" bhi ismein mil jaata hai) |
 
@@ -36,6 +36,10 @@ Maqsad: architecture ke assumptions ko **toro ya confirm karo**. Yahan kuch bhi 
 | 0.10 | Remotion license self-check | employees ≤3 → free tier confirm | written note |
 
 **Gate:** 0.2, 0.5, 0.6 fail → architecture adjust (dekho `01-ARCHITECTURE.md §8`).
+
+> **STATUS (2026-11-20):** Phase 0 spikes 0.5, 0.6 and the render path are **done** inside this repo without
+> Chrome or ffmpeg installed on the host — because the engine ships its own binaries. Phase 1 is implemented:
+> see `docs/08-PHASE1-SCAFFOLD.md` and `README.md`. Remotion is no longer used (`docs/09-ENGINE-DECISION.md`).
 
 ---
 
