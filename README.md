@@ -64,6 +64,10 @@ npx tsx src/cli.ts build --spec examples/demo/director.json --voice dummy --musi
 docker compose -f docker-compose.tts.yml up -d
 npx tsx src/cli.ts build --spec examples/demo/director.json --voice kokoro
 
+# or supply one pre-generated WAV per beat (files are named <beat-id>.wav)
+# timings are measured from each WAV; word-level caption timings are estimated
+npx tsx src/cli.ts build --spec examples/demo/director.json --voice dummy --voice-dir assets/voice-lines
+
 # 4. long-form 16:9
 npx tsx src/cli.ts build --spec examples/long/director.json --voice dummy --music-bed
 
@@ -103,7 +107,7 @@ spec     --brief <file> [--out <file>]        validate a spec (the agent writes 
 plan     --spec <file>                        timing estimate, no render
 still    --spec <file> --frame <n>            one PNG — cheapest feedback loop
 sheet    --spec <file>                        contact sheet of 9 frames
-build    --spec <file> [--draft] [--voice p] [--music <file> | --music-bed]
+build    --spec <file> [--draft] [--voice p] [--voice-dir <dir>] [--music <file> | --music-bed]
 variants --spec <file> [--count N] [--draft]  variation engine
 critique --spec <file> [--llm] [--apply]      rules critic (+ optional Claude Code pass)
 hooks    --spec <file> [--count N] [--render] same body, N hooks → N renders / publish slots

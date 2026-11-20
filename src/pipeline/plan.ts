@@ -11,13 +11,15 @@ import path from 'node:path';
 import type { Director, Beat } from '../schema/director.js';
 import type { RenderBeat, RenderInput, TimedWord, TimingReport, StyleSpec } from '../engine/types.js';
 import { canvases, resolveBrand } from '../brand/tokens.js';
-import { synthesize, estimateMs, type PreferProvider } from './tts.js';
+import { synthesize, estimateMs, estimateWordTimings, type PreferProvider } from './tts.js';
 import { readWav, writeWav, concatWav, trimSilence } from '../lib/wav.js';
 import { countWords, WORDS_PER_SECOND } from '../schema/director.js';
 
 export type BuildOptions = {
   projectDir: string;
   voice: PreferProvider;
+  /** Optional directory of pre-generated WAVs named <beat-id>.wav. */
+  voiceFilesDir?: string;
   /** synthetic silence pad between beats */
   beatPadMs?: number;
   log?: (msg: string) => void;
@@ -125,16 +127,29 @@ export async function buildProject(spec: Director, opts: BuildOptions): Promise<
     let words: TimedWord[] = [];
 
     if (beat.vo.trim().length > 0) {
-      const result = await synthesize(
-        {
-          text: beat.vo,
-          outWav: wavPath,
-          voice: spec.audio.voice,
-          speed: spec.audio.speed,
-          lang: spec.language,
-        },
-        opts.voice,
-      );
+      const externalWav = opts.voiceFilesDir ? path.join(opts.voiceFilesDir, `${beat.id}.wav`) : undefined;
+      const result = externalWav && fs.existsSync(externalWav)
+        ? (() => {
+            const source = readWav(externalWav);
+            writeWav(wavPath, source.samples, source.sampleRate);
+            return {
+              provider: 'external-file',
+              wavPath,
+              words: estimateWordTimings(beat.vo, source.durationMs),
+              durationMs: source.durationMs,
+              exact: false,
+            };
+          })()
+        : await synthesize(
+            {
+              text: beat.vo,
+              outWav: wavPath,
+              voice: spec.audio.voice,
+              speed: spec.audio.speed,
+              lang: spec.language,
+            },
+            opts.voice,
+          );
       if (!result.exact) {
         report.warnings.push(
           `beat ${beat.id}: provider "${result.provider}" gave no word timings — estimated (enable Kokoro for exact captions)`,

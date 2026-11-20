@@ -14,3 +14,8 @@ logs/
 # OpenFilm exports are generated handoff artefacts, not source
 openfilm/
 .bin/
+# One-off generated narration/render workspace for the first real-voice short
+projects/first-real-short/
+
+# Generated build outputs for the demo short
+projects/first-short-skip-intro/

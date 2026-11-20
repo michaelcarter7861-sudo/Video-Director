@@ -11,6 +11,7 @@ import { deriveVisualPayloads, buildProject } from '../src/pipeline/plan.js';
 import { DEFAULT_PRIORS, parseMetricsCsv, foldPriors, expectedRetention, rankHooks, savePriors, loadPriors } from '../src/pipeline/priors.js';
 import { planHooks, applyHook } from '../src/pipeline/hooks.js';
 import { buildOpenFilmProject } from '../src/pipeline/openfilm.js';
+import { dummy } from '../src/pipeline/tts.js';
 
 const load = (p: string) => JSON.parse(fs.readFileSync(path.join(process.cwd(), p), 'utf8'));
 
@@ -26,6 +27,25 @@ async function silentBuild(spec: ReturnType<typeof specOf>, dir: string) {
   silent.beats = silent.beats.map((b) => ({ ...b, vo: '', minSec: 1.1, maxSec: Math.max(b.maxSec, 1.1) }));
   return buildProject(silent, { projectDir: dir, voice: 'dummy' });
 }
+
+test('buildProject accepts one WAV per beat and measures external voice audio', async () => {
+  const spec = specOf('examples/demo/director.json');
+  spec.beats = [structuredClone(spec.beats[0]!)];
+  spec.beats[0]!.vo = 'A real voice line from a file.';
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'vd-external-voice-'));
+  const voiceDir = path.join(root, 'voice');
+  const projectDir = path.join(root, 'project');
+  fs.mkdirSync(voiceDir, { recursive: true });
+  const external = path.join(voiceDir, `${spec.beats[0]!.id}.wav`);
+  const written = dummy({ text: spec.beats[0]!.vo, outWav: external, voice: 'dummy', speed: 1, lang: 'en' });
+
+  const built = await buildProject(spec, { projectDir, voice: 'dummy', voiceFilesDir: voiceDir });
+  assert.ok(built.report.beats[0]!.measuredMs > 0);
+  assert.ok(Math.abs(built.report.beats[0]!.measuredMs - written.durationMs) < 100);
+  assert.ok(built.report.warnings.some((w) => w.includes('external-file')));
+  assert.ok(fs.existsSync(built.audioPath));
+  assert.equal(built.renderInput.beats[0]!.words.map((w) => w.word).join(' '), spec.beats[0]!.vo);
+});
 
 test('metrics CSV parsing requires the real headers and skips junk rows', () => {
   const rows = parseMetricsCsv(

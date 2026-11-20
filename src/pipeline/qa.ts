@@ -275,18 +275,14 @@ export async function runQa(file: string, input: RenderInput, opts: { targetLufs
   return report;
 }
 
-/** Two-pass loudness normalisation to -14 LUFS (platform standard). */
+/** Loudness normalisation with a conservative true-peak ceiling, even when input LUFS is near target. */
 export async function normalizeLoudness(inFile: string, outFile: string, targetLufs = -14): Promise<void> {
-  const measured = await measureLoudness(inFile);
-  const gain = targetLufs - measured.lufs;
-  if (Math.abs(gain) < 0.4) {
-    fs.copyFileSync(inFile, outFile);
-    return;
-  }
   await run(ffmpegPath(), [
     '-y', '-i', inFile,
     '-c:v', 'copy',
-    '-af', `volume=${gain.toFixed(2)}dB,alimiter=limit=0.94`,
+    // Always run loudnorm: simply skipping near-target audio lets clipped or inter-sample
+    // peaks through. A -2 dBTP target leaves margin for AAC's reconstructed peaks.
+    '-af', `loudnorm=I=${targetLufs}:TP=-2:LRA=11`,
     '-c:a', 'aac', '-b:a', '192k',
     outFile,
   ]);

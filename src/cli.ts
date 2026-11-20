@@ -50,7 +50,7 @@ video-director — deterministic video engine (no Remotion, no video model)
   ingest   --csv <file>                             metrics CSV -> data/priors.json (ranks hooks)
   openfilm --spec <file> [--out <dir>]              export an editable OpenFilm Studio project
   plan    --spec <file>                              timing estimate before you spend a render
-  build   --spec <file> [--draft] [--voice <p>]       spec -> voice -> timeline -> render -> qa -> publish
+  build   --spec <file> [--draft] [--voice <p>] [--voice-dir <dir>] spec -> voice -> timeline -> render -> qa -> publish
   still   --spec <file> --frame <n>                  one PNG (cheapest feedback)
   sheet   --spec <file>                              contact sheet PNG of 9 stills
   voice   --text "<line>" [--voice af_heart]         test the TTS chain
@@ -94,6 +94,7 @@ async function main() {
       file: { type: 'string' },
       text: { type: 'string' },
       voice: { type: 'string' },
+      'voice-dir': { type: 'string' },
       draft: { type: 'boolean', default: false },
       count: { type: 'string' },
       music: { type: 'string' },
@@ -187,6 +188,7 @@ async function main() {
       const built = await buildProject(withPayloads, {
         projectDir: dir,
         voice: (values.voice as PreferProvider) ?? 'auto',
+        voiceFilesDir: values['voice-dir'] ? path.resolve(String(values['voice-dir'])) : undefined,
         log: values.quiet ? undefined : log,
       });
       fs.writeFileSync(path.join(dir, 'render.json'), JSON.stringify(built.renderInput, null, 2));
