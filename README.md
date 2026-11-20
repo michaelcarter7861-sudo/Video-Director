@@ -42,8 +42,12 @@ Working end-to-end. Phases 1–4 of `docs/02-PLAN.md` are shipped:
 - **Best-frame thumbnails**: contrast / edge-energy / ink-coverage scored, 1280px JPEG
 - **Review page**: one self-contained `review.html` — video, QA gates, critic, titles, licences
 - **Long → shorts**: re-directed 9:16 excerpts with their own hook and loop, not crops
+- **Hook A/B**: same body, N hooks → N renders; the body is provably identical across slots
+- **Metrics ingest + priors**: analytics CSV → views-weighted, shrunk hook ranking in `data/priors.json`
+- **Dashboard**: `out/dashboard.html` — every project with QA, critic, views, retention
+- **OpenFilm handoff**: export a spec as an editable Studio project (MIT, `github.com/openfilm/openfilm`)
 - Every `build` now emits critic + thumbnail + review page automatically
-- 27 tests (determinism, validation, captions, timing, schema parity, scenes, critic, distinctness, shorts)
+- 35 tests (determinism, validation, captions, timing, schema parity, scenes, critic, distinctness, shorts)
 
 ## Quick start
 
@@ -75,6 +79,17 @@ npx tsx src/cli.ts build --spec projects/long-form-agent-video-engine-shorts/lon
 
 # 8. review everything in a browser (no server, relative paths only)
 open out/why-shorts-die-at-2s/review.html
+
+# 9. one body, three hooks, three publish slots (real A/B, not a guess)
+npx tsx src/cli.ts hooks --spec examples/demo/director.json --count 3 --render --voice dummy
+
+# 10. feed real numbers back so the ranking stops being an opinion
+npx tsx src/cli.ts ingest --csv data/metrics.example.csv
+npx tsx src/cli.ts dashboard --csv data/metrics.example.csv   # → out/dashboard.html
+
+# 11. hand it to a human: editable timeline, no re-render
+npx tsx src/cli.ts openfilm --spec examples/demo/director.json
+npx -y openfilm@latest open openfilm/why-shorts-die-at-2s
 ```
 
 Outputs land in `out/<id>/`: `video.mp4`, `contact-sheet.png`, `thumb.png`, `thumb.jpg`, `review.html`, `stills/`.
@@ -91,6 +106,10 @@ sheet    --spec <file>                        contact sheet of 9 frames
 build    --spec <file> [--draft] [--voice p] [--music <file> | --music-bed]
 variants --spec <file> [--count N] [--draft]  variation engine
 critique --spec <file> [--llm] [--apply]      rules critic (+ optional Claude Code pass)
+hooks    --spec <file> [--count N] [--render] same body, N hooks → N renders / publish slots
+ingest   --csv <file>                         metrics CSV → data/priors.json
+dashboard [--csv <file>]                      every project on one page (+ metrics)
+openfilm --spec <file> [--out <dir>]          export an editable OpenFilm Studio project
 distinct --ids a,b,c                          distinctness gate across built variants
 shorts   --spec <long.json> [--count N]       long-form → N standalone vertical shorts
 thumb    --spec <file>                        best thumbnail frame → PNG + JPG
@@ -149,15 +168,17 @@ src/
   engine/                draw helpers, captions, compositor (render.ts), types
   scenes/                12 scene modules + registry
   pipeline/              tts, plan (timing), audio (music/ducking), qa, publish, variants,
-                         critic, distinct, thumbnail, review, shorts
-tests/                   27 contract tests
+                         critic, distinct, thumbnail, review, shorts, priors, hooks, openfilm
+tests/                   35 contract tests
+data/                    priors.json + example metrics CSV
 examples/                short (9:16) + long (16:9) specs
 docs/                    research, architecture, roadmap, setup, prompts, workflows
 ```
 
 ## Docs
 
-Start with `docs/08-PHASE1-SCAFFOLD.md` (what this code implements), `docs/10-PHASE4-REVIEW.md` (critic, distinctness, shorts), then
+Start with `docs/08-PHASE1-SCAFFOLD.md` (what this code implements), `docs/10-PHASE4-REVIEW.md` (critic, distinctness, shorts),
+`docs/11-PHASE4B-HOOKS-METRICS.md` (hook A/B, priors, OpenFilm handoff), `docs/12-REMAINING-WORK.md` (what is left), then
 `docs/01-ARCHITECTURE.md` (design), `docs/05-SETUP-CHECKLIST.md` (agent wiring),
 `docs/03-REPO-CATALOGUE.md` (which repos to pin vs read), `docs/06-AGENT-PROMPTS.md` (prompt drafts).
 
@@ -169,6 +190,10 @@ Start with `docs/08-PHASE1-SCAFFOLD.md` (what this code implements), `docs/10-PH
 - No stock footage and no AI video: the look is motion-graphics. That is a design choice, not a shortcoming.
 - `critiqueWithLLM` is the only part of the critic that needs the `claude` CLI; without it the rules layer
   still runs and the build is never blocked.
+- Hook priors start as editorial seeds; the labels `seed` / `blended` / `measured` say how much of a
+  ranking is evidence. Nothing is "learned" until real metrics are ingested.
+- The OpenFilm export validates against OpenFilm's own format checker but has not been pixel-compared
+  in this sandbox (no Chromium download). Our MP4 remains the reference render.
 - The distinctness threshold (0.18 avg palette+structure distance) was calibrated on this repo's demos.
   If your batch is a single template family, expect it to fail until you change palette *and* opening shot.
 - Free-model agents are less reliable than frontier ones — which is exactly why the engine never depends on them.

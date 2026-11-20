@@ -150,3 +150,93 @@ export function writeReviewPage(input: ReviewInput): string {
 function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 }
+
+/* -------------------------------------------------------------------
+ * Multi-video dashboard: the "what do I publish this week" page.
+ * Reads each project's qa.json + critique.json + publish.json and links
+ * every per-video review.html. No server, relative paths only.
+ * ------------------------------------------------------------------- */
+
+export type DashboardRow = {
+  id: string;
+  aspect: string;
+  seconds: number;
+  qaPass: boolean;
+  failedGates: string[];
+  criticVerdict: string;
+  issues: number;
+  title: string;
+  hasVideo: boolean;
+  hasReview: boolean;
+  hookFormula?: string;
+  /** measured from an imported analytics CSV, when one was given */
+  metrics?: { views: number; retention3s: number };
+};
+
+export function writeDashboard(rows: DashboardRow[], outFile: string): string {
+  const pass = rows.filter((r) => r.qaPass).length;
+  const failing = rows.filter((r) => !r.qaPass);
+  const html = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video-Director — dashboard (${rows.length})</title>
+<style>
+  :root { color-scheme: dark; --bg:#0b0b0f; --panel:#14141b; --fg:#f5f5f7; --muted:#8e8e93; --ok:#3ddc97; --bad:#ff3b30; --accent:#ffb020; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding:26px 28px 18px; border-bottom:1px solid #23232c; }
+  h1 { font-size:21px; margin:0 0 6px; letter-spacing:-.02em; }
+  .sub { color:var(--muted); font-size:13.5px; }
+  main { padding:24px 28px 60px; }
+  table { width:100%; border-collapse:collapse; font-size:13.5px; }
+  th, td { text-align:left; padding:9px 8px; border-bottom:1px solid #20202a; vertical-align:top; }
+  th { color:var(--muted); font-weight:500; text-transform:uppercase; font-size:11.5px; letter-spacing:.06em; }
+  a { color:var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .pill { display:inline-block; font-size:11.5px; padding:2px 8px; border-radius:999px; }
+  .ok { background:rgba(61,220,151,.15); color:var(--ok); }
+  .bad { background:rgba(255,59,48,.15); color:var(--bad); }
+  .muted { color:var(--muted); }
+  .fail-list { color:var(--bad); font-size:12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>What is ready to publish</h1>
+  <div class="sub">${rows.length} project(s) · <span style="color:var(--ok)">${pass} QA pass</span> · <span style="color:${failing.length ? 'var(--bad)' : 'var(--muted)'}">${failing.length} fail</span> — click a review link to open the full page.</div>
+</header>
+<main>
+<table>
+  <tr><th>project</th><th>format</th><th>length</th><th>qa</th><th>critic</th>${rows.some((r) => r.metrics) ? '<th>views</th><th>ret@3s</th>' : ''}<th>title</th><th></th></tr>
+${rows
+  .map(
+    (r) => `  <tr>
+    <td><code>${escapeHtml(r.id)}</code></td>
+    <td class="muted">${escapeHtml(r.aspect)}</td>
+    <td class="muted">${r.seconds.toFixed(1)}s</td>
+    <td><span class="pill ${r.qaPass ? 'ok' : 'bad'}">${r.qaPass ? 'PASS' : 'FAIL'}</span>${
+      r.failedGates.length ? `<div class="fail-list">${escapeHtml(r.failedGates.join(' · '))}</div>` : ''
+    }</td>
+    <td>${escapeHtml(r.criticVerdict)}${r.issues ? ` <span class="muted">(${r.issues})</span>` : ''}</td>${
+      rows.some((x) => x.metrics)
+        ? `<td>${r.metrics ? r.metrics.views.toLocaleString() : '<span class="muted">—</span>'}</td><td>${
+            r.metrics ? `${Math.round(r.metrics.retention3s * 100)}%` : '<span class="muted">—</span>'
+          }</td>`
+        : ''
+    }
+    <td>${escapeHtml(r.title)}</td>
+    <td>${r.hasReview ? `<a href="../${escapeHtml(r.id)}/review.html">review →</a>` : '<span class="muted">no review</span>'}</td>
+  </tr>`,
+  )
+  .join('\n')}
+</table>
+</main>
+</body>
+</html>
+`;
+  fs.mkdirSync(path.dirname(outFile), { recursive: true });
+  fs.writeFileSync(outFile, html);
+  return outFile;
+}

@@ -1,0 +1,56 @@
+{
+  "targetSec": 32.6,
+  "actualSec": 28.1,
+  "beats": [
+    {
+      "id": "hook",
+      "requestedMaxSec": 2.6,
+      "measuredMs": 1495,
+      "finalSec": 1.5,
+      "capped": false
+    },
+    {
+      "id": "tension",
+      "requestedMaxSec": 4,
+      "measuredMs": 3692,
+      "finalSec": 3.7,
+      "capped": false
+    },
+    {
+      "id": "proof",
+      "requestedMaxSec": 4,
+      "measuredMs": 3327,
+      "finalSec": 3.333,
+      "capped": false
+    },
+    {
+      "id": "chart",
+      "requestedMaxSec": 6,
+      "measuredMs": 5158,
+      "finalSec": 5.167,
+      "capped": false
+    },
+    {
+      "id": "method",
+      "requestedMaxSec": 6,
+      "measuredMs": 5524,
+      "finalSec": 5.533,
+      "capped": false
+    },
+    {
+      "id": "code",
+      "requestedMaxSec": 4,
+      "measuredMs": 3327,
+      "finalSec": 3.333,
+      "capped": false
+    },
+    {
+      "id": "loop",
+      "requestedMaxSec": 6,
+      "measuredMs": 5525,
+      "finalSec": 5.533,
+      "capped": false
+    }
+  ],
+  "warnings": []
+}

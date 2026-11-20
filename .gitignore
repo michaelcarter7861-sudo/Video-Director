@@ -11,3 +11,6 @@ projects/*/vo.wav
 projects/*/words.json
 logs/
 .DS_Store
+# OpenFilm exports are generated handoff artefacts, not source
+openfilm/
+.bin/

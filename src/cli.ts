@@ -16,9 +16,12 @@ import { buildPublishPack, writePublishPack } from './pipeline/publish.js';
 import { planVariants, applyVariant } from './pipeline/variants.js';
 import { critiqueRules, critiqueWithLLM, writeCritique, applyPatches } from './pipeline/critic.js';
 import { bestThumbnail, scoreFrame } from './pipeline/thumbnail.js';
-import { writeReviewPage } from './pipeline/review.js';
+import { writeReviewPage, writeDashboard, type DashboardRow } from './pipeline/review.js';
 import { shortsFromLong, saveShorts, pickWindows } from './pipeline/shorts.js';
 import { stillHashes, compareVariants, type Hash } from './pipeline/distinct.js';
+import { loadPriors, savePriors, parseMetricsCsv, foldPriors, expectedRetention } from './pipeline/priors.js';
+import { planHooks, applyHook, hookTable } from './pipeline/hooks.js';
+import { buildOpenFilmProject } from './pipeline/openfilm.js';
 import { synthesize, type PreferProvider } from './pipeline/tts.js';
 import { ffmpegPath } from './lib/ffmpeg.js';
 import { execFile } from 'node:child_process';
@@ -42,6 +45,10 @@ video-director — deterministic video engine (no Remotion, no video model)
   distinct --ids a,b,c                               aHash distinctness gate across built variants
   thumb    --spec <file>                             best thumbnail frame -> PNG + JPG
   review   --spec <file> [--distinct a,b]           static review page (video, qa, critic, titles)
+  dashboard [--csv <file>]                          every built project on one page (+ optional metrics CSV)
+  hooks    --spec <file> [--count N] [--render]     same body, N hooks -> N renders / publish slots
+  ingest   --csv <file>                             metrics CSV -> data/priors.json (ranks hooks)
+  openfilm --spec <file> [--out <dir>]              export an editable OpenFilm Studio project
   plan    --spec <file>                              timing estimate before you spend a render
   build   --spec <file> [--draft] [--voice <p>]       spec -> voice -> timeline -> render -> qa -> publish
   still   --spec <file> --frame <n>                  one PNG (cheapest feedback)
@@ -92,6 +99,8 @@ async function main() {
       music: { type: 'string' },
       'music-bed': { type: 'boolean', default: false },
       llm: { type: 'boolean', default: false },
+      csv: { type: 'string' },
+      render: { type: 'boolean', default: false },
       ids: { type: 'string' },
       distinct: { type: 'string' },
       apply: { type: 'boolean', default: false },
@@ -300,6 +309,183 @@ async function main() {
           console.log(`  ✓ ${variantSpec.id} → ${sheet}`);
         }
       }
+      break;
+    }
+
+    case 'dashboard': {
+      const dirs = fs.existsSync(PROJECTS)
+        ? fs.readdirSync(PROJECTS).filter((d) => fs.existsSync(path.join(PROJECTS, d, 'qa.json')))
+        : [];
+      if (dirs.length === 0) {
+        console.error('nothing built yet — run build first');
+        process.exit(2);
+      }
+      const rows: DashboardRow[] = dirs.map((id) => {
+        const read = (f: string) => {
+          const file = path.join(PROJECTS, id, f);
+          return fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
+        };
+        const qa = read('qa.json');
+        const timing = read('timing.json');
+        const critique = read('critique.json');
+        const publish = read('publish.json');
+        const spec = read('director.json');
+        return {
+          id,
+          aspect: spec?.aspect ?? '?',
+          seconds: timing?.actualSec ?? 0,
+          qaPass: Boolean(qa?.pass),
+          failedGates: (qa?.gates ?? []).filter((g: { pass: boolean }) => !g.pass).map((g: { label: string }) => g.label),
+          criticVerdict: critique?.verdict ?? '—',
+          issues: critique?.issues?.length ?? 0,
+          title: publish?.titleVariants?.[0] ?? spec?.thesis ?? '',
+          hasVideo: fs.existsSync(path.join(OUT, id, 'video.mp4')),
+          hasReview: fs.existsSync(path.join(OUT, id, 'review.html')),
+          hookFormula: spec?.hooks?.[0]?.formula,
+        };
+      });
+      // optional: fold measured metrics in so QA and reality sit side by side
+      let metrics: { id: string; views: number; retention3s: number }[] | undefined;
+      if (values.csv && fs.existsSync(path.resolve(String(values.csv)))) {
+        metrics = parseMetricsCsv(fs.readFileSync(path.resolve(String(values.csv)), 'utf8')).map((r) => ({
+          id: r.id,
+          views: r.views,
+          retention3s: r.retention3s ?? +(r.avgViewSec / r.durationSec).toFixed(3),
+        }));
+        fs.writeFileSync(path.join(OUT, 'metrics.json'), JSON.stringify(metrics, null, 2));
+        for (const row of rows) {
+          const m = metrics.find((x) => x.id === row.id);
+          if (m) row.metrics = { views: m.views, retention3s: m.retention3s };
+        }
+      }
+      rows.sort((a, b) => Number(a.qaPass) - Number(b.qaPass) || a.id.localeCompare(b.id));
+
+      const file = writeDashboard(rows, path.join(OUT, 'dashboard.html'));
+      console.log(`✓ ${file}`);
+      console.log(`  ${rows.filter((r) => r.qaPass).length}/${rows.length} QA pass, ${rows.filter((r) => !r.qaPass).length} failing`);
+      for (const row of rows.filter((r) => !r.qaPass)) console.log(`   ✗ ${row.id}: ${row.failedGates.join(', ')}`);
+      if (metrics) {
+        const totalViews = metrics.reduce((a, m) => a + m.views, 0);
+        console.log(`  metrics: ${metrics.length} row(s), ${totalViews.toLocaleString()} views total`);
+      }
+      break;
+    }
+
+    case 'hooks': {
+      if (!values.spec) usage();
+      const spec = await readSpec(values.spec);
+      const priors = loadPriors(ROOT);
+      const count = Math.max(2, Math.min(6, Number(values.count ?? 3)));
+      const plans = planHooks(spec, priors, count);
+      console.log('hook A/B plan (body held constant):');
+      console.table(hookTable(plans));
+      const ranked = spec.hooks
+        .map((h) => ({ formula: h.formula, ...expectedRetention(priors, h.formula) }))
+        .sort((a, b) => b.retention3s - a.retention3s);
+      console.log('priors in use:');
+      console.table(ranked);
+      fs.mkdirSync(path.join(ROOT, 'data'), { recursive: true });
+      fs.writeFileSync(
+        path.join(ROOT, 'data', 'hook-plan.json'),
+        JSON.stringify({ specId: spec.id, generatedAt: new Date().toISOString(), plans }, null, 2),
+      );
+
+      if (values.render) {
+        for (const plan of plans) {
+          const variant = applyHook(spec, plan);
+          const dir = projectDirFor(variant);
+          const withPayloads = deriveVisualPayloads(variant);
+          fs.writeFileSync(path.join(dir, 'director.json'), JSON.stringify(withPayloads, null, 2));
+          const built = await buildProject(withPayloads, { projectDir: dir, voice: (values.voice as PreferProvider) ?? 'dummy' });
+          fs.writeFileSync(path.join(dir, 'render.json'), JSON.stringify(built.renderInput, null, 2));
+          fs.writeFileSync(path.join(dir, 'timing.json'), JSON.stringify(built.report, null, 2));
+          const out = path.join(OUT, variant.id);
+          fs.mkdirSync(out, { recursive: true });
+          const rawOut = path.join(out, 'raw.mp4');
+          await renderVideo(built.renderInput, { outFile: rawOut, quality: values.draft ? 'draft' : 'final' });
+          const finalOut = path.join(out, 'video.mp4');
+          await normalizeLoudness(rawOut, finalOut, withPayloads.audio.loudnessTargetLufs);
+          fs.rmSync(rawOut, { force: true });
+          const qa = await runQa(finalOut, built.renderInput, { targetLufs: withPayloads.audio.loudnessTargetLufs });
+          fs.writeFileSync(path.join(dir, 'qa.json'), JSON.stringify(qa, null, 2));
+          const pack = buildPublishPack(withPayloads, built.report, JSON.parse(fs.readFileSync(built.wordsPath, 'utf8')) as never);
+          writePublishPack(pack, dir);
+          const critique = critiqueRules(withPayloads, built.renderInput, built.report);
+          writeCritique(critique, dir);
+          const thumb = await bestThumbnail(built.renderInput, out);
+          const stillsRel: string[] = [];
+          for (const frame of pickFrames(built.renderInput.totalFrames, 4)) {
+            const file = path.join(out, 'stills', `f${frame}.png`);
+            renderStill(built.renderInput, frame, file);
+            stillsRel.push(path.relative(out, file));
+          }
+          writeReviewPage({
+            spec: withPayloads,
+            timing: built.report,
+            qa,
+            critique,
+            publish: pack,
+            videoRelPath: 'video.mp4',
+            stillsRel,
+            thumbRel: path.relative(out, thumb.jpg),
+            outFile: path.join(out, 'review.html'),
+          });
+          console.log(`  ✓ ${plan.id} [${plan.formula}] qa ${qa.pass ? 'PASS' : 'FAIL'} → ${finalOut}`);
+        }
+      } else {
+        console.log('  (plan only — re-run with --render to build every slot)');
+      }
+      break;
+    }
+
+    case 'ingest': {
+      if (!values.csv) usage();
+      const csv = fs.readFileSync(path.resolve(String(values.csv)), 'utf8');
+      const rows = parseMetricsCsv(csv);
+      if (rows.length === 0) {
+        console.error('no usable rows — required headers: id,views,avg_view_sec,duration_sec');
+        process.exit(2);
+      }
+      const priors = loadPriors(ROOT);
+      const resolveFormula = (id: string): string | undefined => {
+        const file = path.join(PROJECTS, id, 'director.json');
+        if (!fs.existsSync(file)) return undefined;
+        try {
+          return (JSON.parse(fs.readFileSync(file, 'utf8')) as { hooks?: { formula?: string }[] }).hooks?.[0]?.formula;
+        } catch {
+          return undefined;
+        }
+      };
+      const next = foldPriors(priors, rows, resolveFormula);
+      const file = savePriors(next, ROOT);
+      console.log(`✓ ${rows.length} row(s) folded → ${file}`);
+      console.table(next.measured.map((m) => ({ formula: m.formula, n: m.n, retention3s: m.retention3s, completion: m.completion })));
+      break;
+    }
+
+    case 'openfilm': {
+      if (!values.spec) usage();
+      const spec = await readSpec(values.spec);
+      const withPayloads = deriveVisualPayloads(spec);
+      const dir = projectDirFor(spec);
+      // reuse the measured timeline when one exists; otherwise solve it silently
+      let input;
+      const renderPath = path.join(dir, 'render.json');
+      if (fs.existsSync(renderPath)) {
+        input = JSON.parse(fs.readFileSync(renderPath, 'utf8'));
+      } else {
+        const built = await buildProject(withPayloads, { projectDir: dir, voice: (values.voice as PreferProvider) ?? 'dummy' });
+        input = built.renderInput;
+        fs.writeFileSync(renderPath, JSON.stringify(input, null, 2));
+        fs.writeFileSync(path.join(dir, 'timing.json'), JSON.stringify(built.report, null, 2));
+      }
+      const outDir = path.resolve(String(values.out ?? path.join('openfilm', spec.id)));
+      const result = buildOpenFilmProject(withPayloads, input, outDir);
+      console.log(`✓ OpenFilm project → ${result.dir}`);
+      console.log(`  film.html: ${result.filmHtml}`);
+      console.log(`  ${result.pages.length} shot pages, ${result.seconds.toFixed(2)}s`);
+      for (const warning of result.warnings) console.log(`  ! ${warning}`);
+      console.log(`  open it: npx -y openfilm@latest open ${path.relative(ROOT, result.dir) || '.'}`);
       break;
     }
 

@@ -112,6 +112,11 @@ Maqsad: architecture ke assumptions ko **toro ya confirm karo**. Yahan kuch bhi 
 
 ## Phase 4 — Critic Loop + A/B Instrumentation (2 hafte)
 
+> **STATUS (2026-11-20): DONE.** Critic + patches, distinctness gate, thumbnails, review page,
+> hook A/B, `data/priors.json` ingest with shrinkage, `out/dashboard.html`, OpenFilm handoff,
+> CI publish-batch. Detail: `docs/10-PHASE4-REVIEW.md`, `docs/11-PHASE4B-HOOKS-METRICS.md`.
+> What is left: `docs/12-REMAINING-WORK.md`.
+
 **Goal:** system khud improve kare, insaan sirf approve kare.
 
 **Deliverables**

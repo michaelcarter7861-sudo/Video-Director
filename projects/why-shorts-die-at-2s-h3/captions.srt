@@ -1,0 +1,51 @@
+1
+00:00:00,000 --> 00:00:00,257
+I watched 40 dead shorts. They
+
+2
+00:00:00,257 --> 00:00:02,571
+describe the topic. The viewer already
+
+3
+00:00:02,571 --> 00:00:00,912
+knows the topic. Thirty seven of
+
+4
+00:00:00,912 --> 00:00:03,297
+forty opened with the same sentence.
+
+5
+00:00:00,000 --> 00:00:02,024
+Rewriting only the first line moved
+
+6
+00:00:02,024 --> 00:00:04,183
+retention from twenty four to seventy
+
+7
+00:00:04,183 --> 00:00:01,212
+one percent. So the system is:
+
+8
+00:00:01,212 --> 00:00:03,717
+cut the intro, state the conflict,
+
+9
+00:00:03,717 --> 00:00:00,366
+prove it in one number. Here
+
+10
+00:00:00,366 --> 00:00:02,290
+is the template I keep in
+
+11
+00:00:02,290 --> 00:00:01,882
+the repo. So stop describing. Start
+
+12
+00:00:01,882 --> 00:00:03,688
+at the end. Your first two
+
+13
+00:00:03,688 --> 00:00:05,495
+seconds are lying to you.

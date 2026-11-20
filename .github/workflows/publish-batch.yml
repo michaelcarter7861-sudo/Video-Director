@@ -1,0 +1,98 @@
+name: publish-batch
+
+# One spec in, a reviewed batch out: variants, distinctness gate, hook A/B slots,
+# QA on every file, dashboard, and a downloadable artifact set.
+# Nothing is uploaded to a platform here — a human approves from review.html first.
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: 'Spec file to batch'
+        required: true
+        default: 'examples/demo/director.json'
+      count:
+        description: 'Variants (1-6)'
+        required: true
+        default: '3'
+      hooks:
+        description: 'Render hook A/B slots instead of variants'
+        type: boolean
+        default: false
+      voice:
+        description: 'dummy | kokoro | auto'
+        required: true
+        default: 'dummy'
+
+concurrency:
+  group: publish-batch-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: typecheck + tests
+        run: |
+          npx tsc --noEmit
+          npm test
+
+      - name: batch
+        id: batch
+        run: |
+          set -o pipefail
+          if [ "${{ inputs.hooks }}" = "true" ]; then
+            npx tsx src/cli.ts hooks --spec "${{ inputs.spec }}" --count "${{ inputs.count }}" --render --voice "${{ inputs.voice }}" | tee batch.log
+          else
+            npx tsx src/cli.ts variants --spec "${{ inputs.spec }}" --count "${{ inputs.count }}" --voice "${{ inputs.voice }}" | tee batch.log
+          fi
+
+      - name: distinctness gate (variants only)
+        if: ${{ inputs.hooks == false }}
+        run: |
+          IDS=$(node -e "const s=require('./${{ inputs.spec }}');process.stdout.write(Array.from({length:+process.env.COUNT},(_,i)=>s.id+'-v'+(i+1)).join(','))" COUNT=${{ inputs.count }} 2>/dev/null || true)
+          if [ -n "$IDS" ]; then npx tsx src/cli.ts distinct --ids "$IDS" | tee -a batch.log || echo "::warning::batch too similar — see advice above"; fi
+
+      - name: dashboard
+        run: npx tsx src/cli.ts dashboard | tee -a batch.log
+
+      - name: evidence
+        run: |
+          for f in out/*/video.mp4; do
+            [ -f "$f" ] || continue
+            echo "== $f" >> batch.log
+            ffprobe -v error -show_entries format=duration,size:stream=codec_name,width,height,r_frame_rate -of default=nw=1 "$f" >> batch.log
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: batch-${{ github.run_number }}
+          path: |
+            out/**/video.mp4
+            out/**/thumb.jpg
+            out/**/contact-sheet.png
+            out/dashboard.html
+            out/*/review.html
+            projects/**/qa.json
+            projects/**/critique.json
+            projects/**/publish.json
+            batch.log
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: summary
+        run: |
+          {
+            echo "## Batch result"
+            echo '```'
+            tail -n 40 batch.log
+            echo '```'
+            echo "Open \`out/dashboard.html\` from the artifact to approve or reject each video."
+          } >> "$GITHUB_STEP_SUMMARY"
