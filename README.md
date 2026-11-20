@@ -12,7 +12,18 @@
 | [`docs/01-ARCHITECTURE.md`](docs/01-ARCHITECTURE.md) | Poora system design: 3-tier model, director spec schema, component inventory, folder layout, short vs long, alternative approaches, failure modes |
 | [`docs/02-PLAN.md`](docs/02-PLAN.md) | Phase 0–5 roadmap, milestones, exit criteria, effort breakdown, budget, anti-scope |
 | [`docs/03-REPO-CATALOGUE.md`](docs/03-REPO-CATALOGUE.md) | Kaunse GitHub repos *kaise* use karein (pin / read / data / skill) + acceptance gate + weekly scout process |
-| [`docs/04-OPEN-QUESTIONS.md`](docs/04-OPEN-QUESTIONS.md) | Wo decisions jo aapke jawab par depend karte hain (defaults ke saath) |
+| [`docs/04-OPEN-QUESTIONS.md`](docs/04-OPEN-QUESTIONS.md) | Decisions ka status (kya lock ho gaya, kya khula hai, defaults ke saath) |
+| [`docs/05-SETUP-CHECKLIST.md`](docs/05-SETUP-CHECKLIST.md) | Step-by-step commands: FreeLLMAPI → Claude Code → Remotion skills → permissions → Kokoro → CI, har step ke verification ke saath |
+| [`docs/06-AGENT-PROMPTS.md`](docs/06-AGENT-PROMPTS.md) | Copy-paste ready: `settings.json`, guard hook, `SKILL.md` drafts, director/fixer/critic prompts, subagents |
+| [`docs/07-WORKFLOWS.md`](docs/07-WORKFLOWS.md) | Daily/per-video/batch/long-form workflows, roles, time budget, failure drills |
+| [`docs/08-PHASE1-SCAFFOLD.md`](docs/08-PHASE1-SCAFFOLD.md) | **Locked plan**: tech niche, motion-graphics, 6 scenes, build order, Definition of Done |
+
+## Locked decisions
+
+- **Niche:** tech / AI explainers · **Style:** motion graphics (zero video model, zero stock dependency)
+- **Agent:** Claude Code → FreeLLMAPI (free models), `dontAsk` + allowlist + deny + guard hook ("always yes", safely)
+- **Engine:** Remotion, deterministic, LLM-free render · **TTS:** Kokoro (local, word timestamps)
+- **Start:** full Phase 1 scaffold (6 scenes + pipeline + QA + CI)
 
 ## 30-second summary
 
