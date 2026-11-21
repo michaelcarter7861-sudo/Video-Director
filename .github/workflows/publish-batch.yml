@@ -67,10 +67,11 @@ jobs:
       - name: Evidence
         if: always()
         run: |
+          FFPROBE=$(node -e "process.stdout.write(require('ffprobe-static').path)")
           for f in out/*/video.mp4; do
             [ -f "$f" ] || continue
             echo "== $f" >> batch.log
-            ffprobe -v error -show_entries format=duration,size:stream=codec_name,width,height,r_frame_rate -of default=nw=1 "$f" >> batch.log
+            "$FFPROBE" -v error -show_entries format=duration,size:stream=codec_name,width,height,r_frame_rate -of default=nw=1 "$f" >> batch.log
           done
       - name: Collect MP4 files only
         if: always()

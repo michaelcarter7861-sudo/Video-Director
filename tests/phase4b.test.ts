@@ -301,4 +301,9 @@ test("GitHub Actions video artifacts include MP4 files only", () => {
     /variants --spec .*--render/,
     "batch variants must render full videos",
   );
+  assert.match(
+    batch,
+    /require\('ffprobe-static'\)\.path/,
+    "use the npm-installed ffprobe on GitHub runners",
+  );
 });
