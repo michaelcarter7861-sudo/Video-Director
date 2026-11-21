@@ -1,0 +1,15 @@
+{
+  "verdict": "ship",
+  "source": "rules",
+  "issues": [
+    {
+      "beatId": "dots",
+      "severity": "med",
+      "problem": "3 beats in a row feel like the same shot"
+    }
+  ],
+  "patches": [],
+  "notes": [
+    "alternate text / data / motion families"
+  ]
+}

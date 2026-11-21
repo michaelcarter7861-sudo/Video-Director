@@ -1,0 +1,75 @@
+{
+  "id": "scene-showcase-new",
+  "titleVariants": [
+    "Four new scene types: glitch interrupts, dot grids for scale, timelines for history, quotes…",
+    "Four new ways to hold attention. — Four new scene types: glitch interrupts, dot grids for s…",
+    "Four new ways to hold attention."
+  ],
+  "description": "Four new scene types: glitch interrupts, dot grids for scale, timelines for history, quotes for authority.\n\nWhat is in this video:\n1. four new scenes\n2. THIS IS WRONG\n3. everything is interlinked\n4. three versions, one idea\n5. ship the boring version first\n6. four new scenes\n\nAngle: contrarian · Audience: solo developers and creators under 100k followers\nBased on: my own review of 40 failed shorts and the exact opening lines they used\n\n\nVoice: synthetic (af_heart). Visuals: programmatically rendered.\n#shorts #buildinpublic",
+  "tags": [
+    "shorts",
+    "content strategy",
+    "hooks",
+    "retention",
+    "four",
+    "scene",
+    "types",
+    "glitch",
+    "interrupts",
+    "grids",
+    "scale",
+    "timelines",
+    "history",
+    "quotes",
+    "authority"
+  ],
+  "hashtags": [
+    "#shorts",
+    "#contentstrategy",
+    "#hooks",
+    "#retention",
+    "#four"
+  ],
+  "disclosure": {
+    "syntheticVoice": true,
+    "aiGeneratedVisuals": false
+  },
+  "thumbnailFrame": 0,
+  "licenses": [
+    {
+      "asset": "Inter",
+      "kind": "font",
+      "source": "npm @fontsource/inter",
+      "license": "OFL-1.1",
+      "attribution": "Rasmus Andersson"
+    },
+    {
+      "asset": "Space Grotesk",
+      "kind": "font",
+      "source": "npm @fontsource/space-grotesk",
+      "license": "OFL-1.1",
+      "attribution": "Florian Karsten"
+    },
+    {
+      "asset": "JetBrains Mono",
+      "kind": "font",
+      "source": "npm @fontsource/jetbrains-mono",
+      "license": "OFL-1.1",
+      "attribution": "JetBrains"
+    },
+    {
+      "asset": "voiceover",
+      "kind": "audio",
+      "source": "tts:af_heart",
+      "license": "model-dependent (Kokoro-82M = Apache-2.0)",
+      "attribution": "Synthetic voice generated locally"
+    },
+    {
+      "asset": "renderer",
+      "kind": "code",
+      "source": "video-director (this repo) / @napi-rs/canvas / ffmpeg (LGPL build)",
+      "license": "MIT / MIT / LGPL-2.1+",
+      "attribution": "Programmatic rendering — no stock footage used"
+    }
+  ]
+}

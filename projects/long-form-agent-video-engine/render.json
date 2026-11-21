@@ -1,0 +1,813 @@
+{
+  "id": "long-form-agent-video-engine",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "totalFrames": 1097,
+  "palette": {
+    "id": "dark-tech",
+    "bg": "#0B0B0F",
+    "bgAlt": "#14141B",
+    "fg": "#F5F5F7",
+    "fgMuted": "#8E8E93",
+    "accent": "#FF3B30",
+    "accentAlt": "#3DDC97",
+    "grid": "#22222C"
+  },
+  "fonts": {
+    "id": "space-inter",
+    "display": {
+      "family": "Space Grotesk",
+      "weight": 700,
+      "letterSpacing": -1.5
+    },
+    "body": {
+      "family": "Inter",
+      "weight": 500,
+      "letterSpacing": 0
+    },
+    "mono": {
+      "family": "JetBrains Mono",
+      "weight": 500
+    },
+    "uppercaseDisplay": false
+  },
+  "style": {
+    "templateFamily": "data-story",
+    "captionStyle": "line",
+    "grain": 0.03,
+    "vignette": 0.2,
+    "progressBar": true
+  },
+  "beats": [
+    {
+      "id": "cold-open",
+      "role": "hook",
+      "index": 0,
+      "fromFrame": 0,
+      "durationInFrames": 111,
+      "words": [
+        {
+          "word": "You",
+          "startMs": 0,
+          "endMs": 282,
+          "emphasis": false
+        },
+        {
+          "word": "do",
+          "startMs": 282,
+          "endMs": 470,
+          "emphasis": false
+        },
+        {
+          "word": "not",
+          "startMs": 470,
+          "endMs": 751,
+          "emphasis": false
+        },
+        {
+          "word": "need",
+          "startMs": 751,
+          "endMs": 1127,
+          "emphasis": false
+        },
+        {
+          "word": "a",
+          "startMs": 1127,
+          "endMs": 1315,
+          "emphasis": false
+        },
+        {
+          "word": "video",
+          "startMs": 1315,
+          "endMs": 1785,
+          "emphasis": false
+        },
+        {
+          "word": "model",
+          "startMs": 1785,
+          "endMs": 2254,
+          "emphasis": false
+        },
+        {
+          "word": "to",
+          "startMs": 2254,
+          "endMs": 2442,
+          "emphasis": false
+        },
+        {
+          "word": "ship",
+          "startMs": 2442,
+          "endMs": 2818,
+          "emphasis": false
+        },
+        {
+          "word": "video.",
+          "startMs": 2818,
+          "endMs": 3663,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "no video model needed",
+      "emphasis": [
+        "no video model"
+      ],
+      "visual": {
+        "type": "kinetic-type",
+        "motion": "slam"
+      },
+      "audioMs": 3692
+    },
+    {
+      "id": "promise",
+      "role": "tension",
+      "index": 1,
+      "fromFrame": 111,
+      "durationInFrames": 188,
+      "words": [
+        {
+          "word": "Everything",
+          "startMs": 0,
+          "endMs": 865,
+          "emphasis": false
+        },
+        {
+          "word": "you",
+          "startMs": 865,
+          "endMs": 1124,
+          "emphasis": false
+        },
+        {
+          "word": "are",
+          "startMs": 1124,
+          "endMs": 1384,
+          "emphasis": false
+        },
+        {
+          "word": "about",
+          "startMs": 1384,
+          "endMs": 1816,
+          "emphasis": false
+        },
+        {
+          "word": "to",
+          "startMs": 1816,
+          "endMs": 1989,
+          "emphasis": false
+        },
+        {
+          "word": "see",
+          "startMs": 1989,
+          "endMs": 2249,
+          "emphasis": false
+        },
+        {
+          "word": "was",
+          "startMs": 2249,
+          "endMs": 2508,
+          "emphasis": false
+        },
+        {
+          "word": "drawn",
+          "startMs": 2508,
+          "endMs": 2941,
+          "emphasis": false
+        },
+        {
+          "word": "by",
+          "startMs": 2941,
+          "endMs": 3114,
+          "emphasis": false
+        },
+        {
+          "word": "code,",
+          "startMs": 3114,
+          "endMs": 3632,
+          "emphasis": false
+        },
+        {
+          "word": "from",
+          "startMs": 3632,
+          "endMs": 3978,
+          "emphasis": false
+        },
+        {
+          "word": "a",
+          "startMs": 3978,
+          "endMs": 4151,
+          "emphasis": false
+        },
+        {
+          "word": "JSON",
+          "startMs": 4151,
+          "endMs": 4497,
+          "emphasis": false
+        },
+        {
+          "word": "file",
+          "startMs": 4497,
+          "endMs": 4843,
+          "emphasis": false
+        },
+        {
+          "word": "an",
+          "startMs": 4843,
+          "endMs": 5016,
+          "emphasis": false
+        },
+        {
+          "word": "agent",
+          "startMs": 5016,
+          "endMs": 5449,
+          "emphasis": false
+        },
+        {
+          "word": "wrote.",
+          "startMs": 5449,
+          "endMs": 6227,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "code drew this",
+      "emphasis": [],
+      "visual": {
+        "type": "terminal",
+        "motion": "rise",
+        "lines": [
+          "$ npx tsx src/cli.ts build --spec director.json",
+          "✓ 887 frames rendered",
+          "✓ qa: PASS"
+        ]
+      },
+      "audioMs": 6255
+    },
+    {
+      "id": "chapter-1",
+      "role": "payoff",
+      "index": 2,
+      "fromFrame": 299,
+      "durationInFrames": 111,
+      "words": [
+        {
+          "word": "Chapter",
+          "startMs": 0,
+          "endMs": 475,
+          "emphasis": false
+        },
+        {
+          "word": "one.",
+          "startMs": 475,
+          "endMs": 950,
+          "emphasis": false
+        },
+        {
+          "word": "The",
+          "startMs": 950,
+          "endMs": 1153,
+          "emphasis": false
+        },
+        {
+          "word": "agent",
+          "startMs": 1153,
+          "endMs": 1492,
+          "emphasis": false
+        },
+        {
+          "word": "writes",
+          "startMs": 1492,
+          "endMs": 1899,
+          "emphasis": false
+        },
+        {
+          "word": "a",
+          "startMs": 1899,
+          "endMs": 2035,
+          "emphasis": false
+        },
+        {
+          "word": "spec,",
+          "startMs": 2035,
+          "endMs": 2442,
+          "emphasis": false
+        },
+        {
+          "word": "never",
+          "startMs": 2442,
+          "endMs": 2781,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 2781,
+          "endMs": 2985,
+          "emphasis": false
+        },
+        {
+          "word": "pixels.",
+          "startMs": 2985,
+          "endMs": 3663,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "chapter 1: the spec",
+      "emphasis": [],
+      "visual": {
+        "type": "kinetic-type",
+        "motion": "wipe"
+      },
+      "audioMs": 3690
+    },
+    {
+      "id": "spec-code",
+      "role": "payoff",
+      "index": 3,
+      "fromFrame": 410,
+      "durationInFrames": 166,
+      "words": [
+        {
+          "word": "Beats,",
+          "startMs": 0,
+          "endMs": 493,
+          "emphasis": false
+        },
+        {
+          "word": "roles,",
+          "startMs": 493,
+          "endMs": 986,
+          "emphasis": false
+        },
+        {
+          "word": "visual",
+          "startMs": 986,
+          "endMs": 1409,
+          "emphasis": false
+        },
+        {
+          "word": "types,",
+          "startMs": 1409,
+          "endMs": 1902,
+          "emphasis": false
+        },
+        {
+          "word": "and",
+          "startMs": 1902,
+          "endMs": 2113,
+          "emphasis": false
+        },
+        {
+          "word": "a",
+          "startMs": 2113,
+          "endMs": 2254,
+          "emphasis": false
+        },
+        {
+          "word": "hard",
+          "startMs": 2254,
+          "endMs": 2536,
+          "emphasis": false
+        },
+        {
+          "word": "cap",
+          "startMs": 2536,
+          "endMs": 2748,
+          "emphasis": false
+        },
+        {
+          "word": "on",
+          "startMs": 2748,
+          "endMs": 2888,
+          "emphasis": false
+        },
+        {
+          "word": "seconds.",
+          "startMs": 2888,
+          "endMs": 3663,
+          "emphasis": false
+        },
+        {
+          "word": "That",
+          "startMs": 3663,
+          "endMs": 3945,
+          "emphasis": false
+        },
+        {
+          "word": "is",
+          "startMs": 3945,
+          "endMs": 4086,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 4086,
+          "endMs": 4297,
+          "emphasis": false
+        },
+        {
+          "word": "whole",
+          "startMs": 4297,
+          "endMs": 4650,
+          "emphasis": false
+        },
+        {
+          "word": "contract.",
+          "startMs": 4650,
+          "endMs": 5495,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "the contract",
+      "emphasis": [],
+      "visual": {
+        "type": "code",
+        "motion": "rise",
+        "lang": "json",
+        "code": "{\n  \"role\": \"hook\",\n  \"maxSec\": 3,\n  \"visual\": { \"type\": \"kinetic-type\" }\n}",
+        "highlight": [
+          2,
+          3
+        ]
+      },
+      "audioMs": 5523
+    },
+    {
+      "id": "chapter-2",
+      "role": "payoff",
+      "index": 4,
+      "fromFrame": 576,
+      "durationInFrames": 100,
+      "words": [
+        {
+          "word": "Chapter",
+          "startMs": 0,
+          "endMs": 391,
+          "emphasis": false
+        },
+        {
+          "word": "two.",
+          "startMs": 391,
+          "endMs": 782,
+          "emphasis": false
+        },
+        {
+          "word": "Meaning",
+          "startMs": 782,
+          "endMs": 1174,
+          "emphasis": false
+        },
+        {
+          "word": "comes",
+          "startMs": 1174,
+          "endMs": 1453,
+          "emphasis": false
+        },
+        {
+          "word": "from",
+          "startMs": 1453,
+          "endMs": 1676,
+          "emphasis": false
+        },
+        {
+          "word": "structure,",
+          "startMs": 1676,
+          "endMs": 2291,
+          "emphasis": false
+        },
+        {
+          "word": "not",
+          "startMs": 2291,
+          "endMs": 2459,
+          "emphasis": false
+        },
+        {
+          "word": "from",
+          "startMs": 2459,
+          "endMs": 2682,
+          "emphasis": false
+        },
+        {
+          "word": "footage.",
+          "startMs": 2682,
+          "endMs": 3297,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "chapter 2: structure",
+      "emphasis": [],
+      "visual": {
+        "type": "diagram",
+        "motion": "rise",
+        "nodes": [
+          "hook",
+          "tension",
+          "proof",
+          "loop"
+        ]
+      },
+      "audioMs": 3326
+    },
+    {
+      "id": "proof",
+      "role": "payoff",
+      "index": 5,
+      "fromFrame": 676,
+      "durationInFrames": 122,
+      "words": [
+        {
+          "word": "Ninety",
+          "startMs": 0,
+          "endMs": 424,
+          "emphasis": false
+        },
+        {
+          "word": "four",
+          "startMs": 424,
+          "endMs": 707,
+          "emphasis": false
+        },
+        {
+          "word": "percent",
+          "startMs": 707,
+          "endMs": 1202,
+          "emphasis": false
+        },
+        {
+          "word": "of",
+          "startMs": 1202,
+          "endMs": 1343,
+          "emphasis": false
+        },
+        {
+          "word": "a",
+          "startMs": 1343,
+          "endMs": 1484,
+          "emphasis": false
+        },
+        {
+          "word": "good",
+          "startMs": 1484,
+          "endMs": 1767,
+          "emphasis": false
+        },
+        {
+          "word": "explainer",
+          "startMs": 1767,
+          "endMs": 2403,
+          "emphasis": false
+        },
+        {
+          "word": "is",
+          "startMs": 2403,
+          "endMs": 2545,
+          "emphasis": false
+        },
+        {
+          "word": "timing",
+          "startMs": 2545,
+          "endMs": 2969,
+          "emphasis": false
+        },
+        {
+          "word": "and",
+          "startMs": 2969,
+          "endMs": 3181,
+          "emphasis": false
+        },
+        {
+          "word": "contrast.",
+          "startMs": 3181,
+          "endMs": 4029,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "timing and contrast",
+      "emphasis": [],
+      "visual": {
+        "type": "chart",
+        "motion": "rise",
+        "chartType": "bar",
+        "data": [
+          {
+            "label": "timing",
+            "value": 52
+          },
+          {
+            "label": "contrast",
+            "value": 42
+          },
+          {
+            "label": "asset quality",
+            "value": 6
+          }
+        ]
+      },
+      "audioMs": 4055
+    },
+    {
+      "id": "chapter-3",
+      "role": "rehook",
+      "index": 6,
+      "fromFrame": 798,
+      "durationInFrames": 144,
+      "words": [
+        {
+          "word": "And",
+          "startMs": 0,
+          "endMs": 260,
+          "emphasis": false
+        },
+        {
+          "word": "here",
+          "startMs": 260,
+          "endMs": 606,
+          "emphasis": false
+        },
+        {
+          "word": "is",
+          "startMs": 606,
+          "endMs": 779,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 779,
+          "endMs": 1039,
+          "emphasis": false
+        },
+        {
+          "word": "part",
+          "startMs": 1039,
+          "endMs": 1385,
+          "emphasis": false
+        },
+        {
+          "word": "nobody",
+          "startMs": 1385,
+          "endMs": 1905,
+          "emphasis": false
+        },
+        {
+          "word": "says",
+          "startMs": 1905,
+          "endMs": 2251,
+          "emphasis": false
+        },
+        {
+          "word": "out",
+          "startMs": 2251,
+          "endMs": 2511,
+          "emphasis": false
+        },
+        {
+          "word": "loud:",
+          "startMs": 2511,
+          "endMs": 3030,
+          "emphasis": false
+        },
+        {
+          "word": "variety",
+          "startMs": 3030,
+          "endMs": 3636,
+          "emphasis": false
+        },
+        {
+          "word": "is",
+          "startMs": 3636,
+          "endMs": 3810,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 3810,
+          "endMs": 4069,
+          "emphasis": false
+        },
+        {
+          "word": "moat.",
+          "startMs": 4069,
+          "endMs": 4762,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "chapter 3: variety",
+      "emphasis": [],
+      "visual": {
+        "type": "split",
+        "motion": "rise",
+        "left": "ten identical uploads",
+        "right": "ten different openings"
+      },
+      "audioMs": 4792
+    },
+    {
+      "id": "loop",
+      "role": "loop",
+      "index": 7,
+      "fromFrame": 942,
+      "durationInFrames": 155,
+      "words": [
+        {
+          "word": "Which",
+          "startMs": 0,
+          "endMs": 427,
+          "emphasis": false
+        },
+        {
+          "word": "brings",
+          "startMs": 427,
+          "endMs": 940,
+          "emphasis": false
+        },
+        {
+          "word": "us",
+          "startMs": 940,
+          "endMs": 1111,
+          "emphasis": false
+        },
+        {
+          "word": "back.",
+          "startMs": 1111,
+          "endMs": 1795,
+          "emphasis": false
+        },
+        {
+          "word": "You",
+          "startMs": 1795,
+          "endMs": 2051,
+          "emphasis": false
+        },
+        {
+          "word": "do",
+          "startMs": 2051,
+          "endMs": 2222,
+          "emphasis": false
+        },
+        {
+          "word": "not",
+          "startMs": 2222,
+          "endMs": 2479,
+          "emphasis": false
+        },
+        {
+          "word": "need",
+          "startMs": 2479,
+          "endMs": 2820,
+          "emphasis": false
+        },
+        {
+          "word": "a",
+          "startMs": 2820,
+          "endMs": 2991,
+          "emphasis": false
+        },
+        {
+          "word": "video",
+          "startMs": 2991,
+          "endMs": 3419,
+          "emphasis": false
+        },
+        {
+          "word": "model",
+          "startMs": 3419,
+          "endMs": 3846,
+          "emphasis": false
+        },
+        {
+          "word": "to",
+          "startMs": 3846,
+          "endMs": 4017,
+          "emphasis": false
+        },
+        {
+          "word": "ship",
+          "startMs": 4017,
+          "endMs": 4359,
+          "emphasis": false
+        },
+        {
+          "word": "video.",
+          "startMs": 4359,
+          "endMs": 5128,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "no video model needed",
+      "emphasis": [],
+      "visual": {
+        "type": "abstract",
+        "motion": "zoom",
+        "seed": 3311
+      },
+      "audioMs": 5156
+    }
+  ],
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "safeTop": 0.05,
+    "safeBottom": 0.08,
+    "sideMargin": 120
+  },
+  "audioPath": "/home/user/Video-Director/projects/long-form-agent-video-engine/vo.wav",
+  "audioMs": 36567
+}

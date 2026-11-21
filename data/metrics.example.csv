@@ -1,0 +1,7 @@
+id,views,avg_view_sec,duration_sec,retention_3s,formula
+why-shorts-die-at-2s,18400,17.9,28.8,0.66,interrupt
+why-shorts-die-at-2s-h1,24600,19.2,29.6,0.71,interrupt
+why-shorts-die-at-2s-h2,33100,21.8,28.1,0.79,contrarian
+why-shorts-die-at-2s-h3,9200,11.4,28.5,0.44,number
+long-form-agent-video-engine,5100,14.1,36.6,0.52,curiosity
+long-form-agent-video-engine-s1,12800,16.6,31.8,0.61,curiosity

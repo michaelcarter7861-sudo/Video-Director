@@ -1,0 +1,86 @@
+name: render
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: "Path to director.json"
+        required: true
+        default: "examples/demo/director.json"
+      voice:
+        description: "TTS provider (auto|kokoro|freeapi|macos|dummy)"
+        required: true
+        default: "dummy"
+      music_bed:
+        description: "Generate a royalty-free music bed"
+        type: boolean
+        default: true
+  push:
+    branches: [main]
+    paths:
+      - "schemas/**"
+      - "src/**"
+      - "examples/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm test
+
+  render:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Render video
+        shell: bash
+        env:
+          SPEC: ${{ inputs.spec || 'examples/demo/director.json' }}
+          VOICE: ${{ inputs.voice || 'dummy' }}
+          MUSIC_BED: ${{ inputs.music_bed == true }}
+        run: |
+          args=(--spec "$SPEC" --voice "$VOICE")
+          if [ "$MUSIC_BED" = "true" ]; then args+=(--music-bed); fi
+          node --import tsx src/cli.ts build "${args[@]}"
+      - name: Collect MP4 files only
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifact/videos
+          while IFS= read -r -d '' file; do
+            relative="${file#out/}"
+            id="${relative%/video.mp4}"
+            name="${id//\//-}"
+            cp "$file" "artifact/videos/${name}.mp4"
+          done < <(find out -type f -name 'video.mp4' -print0 2>/dev/null || true)
+          echo "Videos staged: $(find artifact/videos -maxdepth 1 -name '*.mp4' | wc -l)"
+      - name: Upload video artifact (MP4 only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-${{ github.run_number }}
+          path: artifact/videos/*.mp4
+          if-no-files-found: warn
+          retention-days: 14
+          compression-level: 0
+      - name: Summary
+        if: always()
+        run: |
+          count=$(find artifact/videos -maxdepth 1 -name '*.mp4' | wc -l)
+          echo "## Rendered videos" >> "$GITHUB_STEP_SUMMARY"
+          echo "MP4 files staged in the **videos-${{ github.run_number }}** artifact: $count" >> "$GITHUB_STEP_SUMMARY"
+          echo "The artifact contains video files only — no HTML, source specs, or code." >> "$GITHUB_STEP_SUMMARY"

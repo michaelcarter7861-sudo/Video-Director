@@ -1,0 +1,67 @@
+{
+  "targetSec": 38.5,
+  "actualSec": 36.57,
+  "beats": [
+    {
+      "id": "cold-open",
+      "requestedMaxSec": 3.5,
+      "measuredMs": 3692,
+      "finalSec": 3.7,
+      "capped": true
+    },
+    {
+      "id": "promise",
+      "requestedMaxSec": 5,
+      "measuredMs": 6255,
+      "finalSec": 6.267,
+      "capped": true
+    },
+    {
+      "id": "chapter-1",
+      "requestedMaxSec": 4.5,
+      "measuredMs": 3690,
+      "finalSec": 3.7,
+      "capped": false
+    },
+    {
+      "id": "spec-code",
+      "requestedMaxSec": 6,
+      "measuredMs": 5523,
+      "finalSec": 5.533,
+      "capped": false
+    },
+    {
+      "id": "chapter-2",
+      "requestedMaxSec": 4.5,
+      "measuredMs": 3326,
+      "finalSec": 3.333,
+      "capped": false
+    },
+    {
+      "id": "proof",
+      "requestedMaxSec": 5,
+      "measuredMs": 4055,
+      "finalSec": 4.067,
+      "capped": false
+    },
+    {
+      "id": "chapter-3",
+      "requestedMaxSec": 5,
+      "measuredMs": 4792,
+      "finalSec": 4.8,
+      "capped": false
+    },
+    {
+      "id": "loop",
+      "requestedMaxSec": 5,
+      "measuredMs": 5156,
+      "finalSec": 5.167,
+      "capped": true
+    }
+  ],
+  "warnings": [
+    "beat cold-open: audio is 3.69s but maxSec was 3.5s — kept the audio, duration extended",
+    "beat promise: audio is 6.25s but maxSec was 5s — kept the audio, duration extended",
+    "beat loop: audio is 5.16s but maxSec was 5s — kept the audio, duration extended"
+  ]
+}

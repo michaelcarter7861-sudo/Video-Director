@@ -1,0 +1,683 @@
+{
+  "id": "why-shorts-die-at-2s-v3",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "totalFrames": 887,
+  "palette": {
+    "id": "neon-noir",
+    "bg": "#08060E",
+    "bgAlt": "#120C1F",
+    "fg": "#F2EFFF",
+    "fgMuted": "#9A93B8",
+    "accent": "#C7FF3D",
+    "accentAlt": "#FF3DAE",
+    "grid": "#241A38"
+  },
+  "fonts": {
+    "id": "mono-tech",
+    "display": {
+      "family": "JetBrains Mono",
+      "weight": 700,
+      "letterSpacing": -1
+    },
+    "body": {
+      "family": "Inter",
+      "weight": 400,
+      "letterSpacing": 0
+    },
+    "mono": {
+      "family": "JetBrains Mono",
+      "weight": 400
+    },
+    "uppercaseDisplay": true
+  },
+  "style": {
+    "templateFamily": "terminal-explainer",
+    "captionStyle": "karaoke",
+    "grain": 0.04,
+    "vignette": 0.24,
+    "progressBar": true
+  },
+  "beats": [
+    {
+      "id": "hook",
+      "role": "hook",
+      "index": 0,
+      "fromFrame": 0,
+      "durationInFrames": 45,
+      "words": [
+        {
+          "word": "Stop",
+          "startMs": 0,
+          "endMs": 209,
+          "emphasis": false
+        },
+        {
+          "word": "introducing",
+          "startMs": 209,
+          "endMs": 785,
+          "emphasis": false
+        },
+        {
+          "word": "your",
+          "startMs": 785,
+          "endMs": 994,
+          "emphasis": false
+        },
+        {
+          "word": "video.",
+          "startMs": 994,
+          "endMs": 1465,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "Stop introducing your video",
+      "emphasis": [
+        "2",
+        "LYING"
+      ],
+      "visual": {
+        "type": "kinetic-type",
+        "motion": "rise"
+      },
+      "audioMs": 1495
+    },
+    {
+      "id": "tension",
+      "role": "tension",
+      "index": 1,
+      "fromFrame": 45,
+      "durationInFrames": 111,
+      "words": [
+        {
+          "word": "They",
+          "startMs": 0,
+          "endMs": 257,
+          "emphasis": false
+        },
+        {
+          "word": "describe",
+          "startMs": 257,
+          "endMs": 771,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 771,
+          "endMs": 964,
+          "emphasis": false
+        },
+        {
+          "word": "topic.",
+          "startMs": 964,
+          "endMs": 1542,
+          "emphasis": false
+        },
+        {
+          "word": "The",
+          "startMs": 1542,
+          "endMs": 1735,
+          "emphasis": false
+        },
+        {
+          "word": "viewer",
+          "startMs": 1735,
+          "endMs": 2121,
+          "emphasis": false
+        },
+        {
+          "word": "already",
+          "startMs": 2121,
+          "endMs": 2571,
+          "emphasis": false
+        },
+        {
+          "word": "knows",
+          "startMs": 2571,
+          "endMs": 2892,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 2892,
+          "endMs": 3085,
+          "emphasis": false
+        },
+        {
+          "word": "topic.",
+          "startMs": 3085,
+          "endMs": 3663,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "describing beats disrupting",
+      "emphasis": [],
+      "visual": {
+        "type": "split",
+        "motion": "rise",
+        "left": "In this video I will talk about...",
+        "right": "You are losing at 2 seconds."
+      },
+      "audioMs": 3692
+    },
+    {
+      "id": "proof",
+      "role": "payoff",
+      "index": 2,
+      "fromFrame": 156,
+      "durationInFrames": 100,
+      "words": [
+        {
+          "word": "Thirty",
+          "startMs": 0,
+          "endMs": 421,
+          "emphasis": false
+        },
+        {
+          "word": "seven",
+          "startMs": 421,
+          "endMs": 772,
+          "emphasis": false
+        },
+        {
+          "word": "of",
+          "startMs": 772,
+          "endMs": 912,
+          "emphasis": false
+        },
+        {
+          "word": "forty",
+          "startMs": 912,
+          "endMs": 1263,
+          "emphasis": false
+        },
+        {
+          "word": "opened",
+          "startMs": 1263,
+          "endMs": 1684,
+          "emphasis": false
+        },
+        {
+          "word": "with",
+          "startMs": 1684,
+          "endMs": 1964,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 1964,
+          "endMs": 2175,
+          "emphasis": false
+        },
+        {
+          "word": "same",
+          "startMs": 2175,
+          "endMs": 2455,
+          "emphasis": false
+        },
+        {
+          "word": "sentence.",
+          "startMs": 2455,
+          "endMs": 3297,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "37 of 40",
+      "emphasis": [
+        "37"
+      ],
+      "visual": {
+        "type": "stat",
+        "motion": "zoom",
+        "value": 37,
+        "suffix": " / 40"
+      },
+      "audioMs": 3327
+    },
+    {
+      "id": "chart",
+      "role": "payoff",
+      "index": 3,
+      "fromFrame": 256,
+      "durationInFrames": 155,
+      "words": [
+        {
+          "word": "Rewriting",
+          "startMs": 0,
+          "endMs": 607,
+          "emphasis": false
+        },
+        {
+          "word": "only",
+          "startMs": 607,
+          "endMs": 877,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 877,
+          "endMs": 1080,
+          "emphasis": false
+        },
+        {
+          "word": "first",
+          "startMs": 1080,
+          "endMs": 1417,
+          "emphasis": false
+        },
+        {
+          "word": "line",
+          "startMs": 1417,
+          "endMs": 1687,
+          "emphasis": false
+        },
+        {
+          "word": "moved",
+          "startMs": 1687,
+          "endMs": 2024,
+          "emphasis": false
+        },
+        {
+          "word": "retention",
+          "startMs": 2024,
+          "endMs": 2631,
+          "emphasis": false
+        },
+        {
+          "word": "from",
+          "startMs": 2631,
+          "endMs": 2901,
+          "emphasis": false
+        },
+        {
+          "word": "twenty",
+          "startMs": 2901,
+          "endMs": 3306,
+          "emphasis": false
+        },
+        {
+          "word": "four",
+          "startMs": 3306,
+          "endMs": 3576,
+          "emphasis": false
+        },
+        {
+          "word": "to",
+          "startMs": 3576,
+          "endMs": 3711,
+          "emphasis": false
+        },
+        {
+          "word": "seventy",
+          "startMs": 3711,
+          "endMs": 4183,
+          "emphasis": false
+        },
+        {
+          "word": "one",
+          "startMs": 4183,
+          "endMs": 4386,
+          "emphasis": false
+        },
+        {
+          "word": "percent.",
+          "startMs": 4386,
+          "endMs": 5128,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "only the first line changed",
+      "emphasis": [],
+      "visual": {
+        "type": "chart",
+        "motion": "rise",
+        "chartType": "bar",
+        "data": [
+          {
+            "label": "old hook",
+            "value": 24
+          },
+          {
+            "label": "new hook",
+            "value": 71
+          },
+          {
+            "label": "target",
+            "value": 90
+          }
+        ]
+      },
+      "audioMs": 5158
+    },
+    {
+      "id": "method",
+      "role": "payoff",
+      "index": 4,
+      "fromFrame": 411,
+      "durationInFrames": 166,
+      "words": [
+        {
+          "word": "So",
+          "startMs": 0,
+          "endMs": 162,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 162,
+          "endMs": 404,
+          "emphasis": false
+        },
+        {
+          "word": "system",
+          "startMs": 404,
+          "endMs": 889,
+          "emphasis": false
+        },
+        {
+          "word": "is:",
+          "startMs": 889,
+          "endMs": 1212,
+          "emphasis": false
+        },
+        {
+          "word": "cut",
+          "startMs": 1212,
+          "endMs": 1455,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 1455,
+          "endMs": 1697,
+          "emphasis": false
+        },
+        {
+          "word": "intro,",
+          "startMs": 1697,
+          "endMs": 2263,
+          "emphasis": false
+        },
+        {
+          "word": "state",
+          "startMs": 2263,
+          "endMs": 2667,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 2667,
+          "endMs": 2909,
+          "emphasis": false
+        },
+        {
+          "word": "conflict,",
+          "startMs": 2909,
+          "endMs": 3717,
+          "emphasis": false
+        },
+        {
+          "word": "prove",
+          "startMs": 3717,
+          "endMs": 4121,
+          "emphasis": false
+        },
+        {
+          "word": "it",
+          "startMs": 4121,
+          "endMs": 4283,
+          "emphasis": false
+        },
+        {
+          "word": "in",
+          "startMs": 4283,
+          "endMs": 4444,
+          "emphasis": false
+        },
+        {
+          "word": "one",
+          "startMs": 4444,
+          "endMs": 4687,
+          "emphasis": false
+        },
+        {
+          "word": "number.",
+          "startMs": 4687,
+          "endMs": 5495,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "the 3 step fix",
+      "emphasis": [],
+      "visual": {
+        "type": "diagram",
+        "motion": "rise",
+        "nodes": [
+          "cut the intro",
+          "state conflict",
+          "prove with one number"
+        ]
+      },
+      "audioMs": 5524
+    },
+    {
+      "id": "code",
+      "role": "payoff",
+      "index": 5,
+      "fromFrame": 577,
+      "durationInFrames": 100,
+      "words": [
+        {
+          "word": "Here",
+          "startMs": 0,
+          "endMs": 366,
+          "emphasis": false
+        },
+        {
+          "word": "is",
+          "startMs": 366,
+          "endMs": 550,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 550,
+          "endMs": 824,
+          "emphasis": false
+        },
+        {
+          "word": "template",
+          "startMs": 824,
+          "endMs": 1557,
+          "emphasis": false
+        },
+        {
+          "word": "I",
+          "startMs": 1557,
+          "endMs": 1740,
+          "emphasis": false
+        },
+        {
+          "word": "keep",
+          "startMs": 1740,
+          "endMs": 2106,
+          "emphasis": false
+        },
+        {
+          "word": "in",
+          "startMs": 2106,
+          "endMs": 2290,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 2290,
+          "endMs": 2564,
+          "emphasis": false
+        },
+        {
+          "word": "repo.",
+          "startMs": 2564,
+          "endMs": 3297,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "the hook template",
+      "emphasis": [],
+      "visual": {
+        "type": "code",
+        "motion": "rise",
+        "lang": "ts",
+        "code": "const hook = (topic: string) =>\n  `Your ${topic} is lying to you.`;\n\n// no greeting\n// no channel intro\n// one conflict",
+        "highlight": [
+          1,
+          2,
+          5
+        ]
+      },
+      "audioMs": 3327
+    },
+    {
+      "id": "loop",
+      "role": "loop",
+      "index": 6,
+      "fromFrame": 677,
+      "durationInFrames": 210,
+      "words": [
+        {
+          "word": "So",
+          "startMs": 0,
+          "endMs": 138,
+          "emphasis": false
+        },
+        {
+          "word": "stop",
+          "startMs": 138,
+          "endMs": 413,
+          "emphasis": false
+        },
+        {
+          "word": "describing.",
+          "startMs": 413,
+          "endMs": 1378,
+          "emphasis": false
+        },
+        {
+          "word": "Start",
+          "startMs": 1378,
+          "endMs": 1723,
+          "emphasis": false
+        },
+        {
+          "word": "at",
+          "startMs": 1723,
+          "endMs": 1861,
+          "emphasis": false
+        },
+        {
+          "word": "the",
+          "startMs": 1861,
+          "endMs": 2067,
+          "emphasis": false
+        },
+        {
+          "word": "end.",
+          "startMs": 2067,
+          "endMs": 2550,
+          "emphasis": false
+        },
+        {
+          "word": "Your",
+          "startMs": 2550,
+          "endMs": 2825,
+          "emphasis": false
+        },
+        {
+          "word": "first",
+          "startMs": 2825,
+          "endMs": 3170,
+          "emphasis": false
+        },
+        {
+          "word": "two",
+          "startMs": 3170,
+          "endMs": 3377,
+          "emphasis": false
+        },
+        {
+          "word": "seconds",
+          "startMs": 3377,
+          "endMs": 3859,
+          "emphasis": false
+        },
+        {
+          "word": "are",
+          "startMs": 3859,
+          "endMs": 4066,
+          "emphasis": false
+        },
+        {
+          "word": "lying",
+          "startMs": 4066,
+          "endMs": 4410,
+          "emphasis": false
+        },
+        {
+          "word": "to",
+          "startMs": 4410,
+          "endMs": 4548,
+          "emphasis": false
+        },
+        {
+          "word": "you.",
+          "startMs": 4548,
+          "endMs": 5030,
+          "emphasis": false
+        },
+        {
+          "word": "Stop",
+          "startMs": 5030,
+          "endMs": 5306,
+          "emphasis": false
+        },
+        {
+          "word": "introducing",
+          "startMs": 5306,
+          "endMs": 6064,
+          "emphasis": false
+        },
+        {
+          "word": "your",
+          "startMs": 6064,
+          "endMs": 6340,
+          "emphasis": false
+        },
+        {
+          "word": "video.",
+          "startMs": 6340,
+          "endMs": 6960,
+          "emphasis": false
+        }
+      ],
+      "onScreen": "start at the end",
+      "emphasis": [],
+      "visual": {
+        "type": "abstract",
+        "motion": "zoom",
+        "seed": 41729
+      },
+      "audioMs": 6990
+    }
+  ],
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "safeTop": 0.12,
+    "safeBottom": 0.18,
+    "sideMargin": 72
+  },
+  "audioPath": "/home/user/Video-Director/projects/why-shorts-die-at-2s-v3/vo.wav",
+  "audioMs": 29567
+}

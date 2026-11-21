@@ -1,0 +1,107 @@
+name: publish-batch
+
+# Render a variant or hook batch, then publish MP4 files only as a downloadable artifact.
+# HTML review pages, source specs and code remain internal to the runner and are not uploaded.
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: "Spec file to batch"
+        required: true
+        default: "examples/demo/director.json"
+      count:
+        description: "Variants / hooks (1-6)"
+        required: true
+        default: "3"
+      hooks:
+        description: "Render hook A/B slots instead of visual variants"
+        type: boolean
+        default: false
+      voice:
+        description: "dummy | kokoro | freeapi | auto"
+        required: true
+        default: "dummy"
+
+concurrency:
+  group: publish-batch-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Typecheck and tests
+        run: |
+          npx tsc --noEmit
+          npm test
+      - name: Render batch
+        env:
+          SPEC: ${{ inputs.spec }}
+          COUNT: ${{ inputs.count }}
+          HOOKS: ${{ inputs.hooks }}
+          VOICE: ${{ inputs.voice }}
+        run: |
+          set -o pipefail
+          if [ "$HOOKS" = "true" ]; then
+            npx tsx src/cli.ts hooks --spec "$SPEC" --count "$COUNT" --render --voice "$VOICE" | tee batch.log
+          else
+            npx tsx src/cli.ts variants --spec "$SPEC" --count "$COUNT" --render --voice "$VOICE" | tee batch.log
+          fi
+      - name: Distinctness check (variants only)
+        if: ${{ inputs.hooks == false }}
+        continue-on-error: true
+        env:
+          SPEC: ${{ inputs.spec }}
+          COUNT: ${{ inputs.count }}
+        run: |
+          IDS=$(node --input-type=module -e 'import fs from "node:fs";const s=JSON.parse(fs.readFileSync(process.env.SPEC,"utf8"));process.stdout.write(Array.from({length:+process.env.COUNT},(_,i)=>s.id+"-v"+(i+1)).join(","))')
+          npx tsx src/cli.ts distinct --ids "$IDS" | tee -a batch.log
+      - name: Evidence
+        if: always()
+        run: |
+          for f in out/*/video.mp4; do
+            [ -f "$f" ] || continue
+            echo "== $f" >> batch.log
+            ffprobe -v error -show_entries format=duration,size:stream=codec_name,width,height,r_frame_rate -of default=nw=1 "$f" >> batch.log
+          done
+      - name: Collect MP4 files only
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifact/videos
+          while IFS= read -r -d '' file; do
+            relative="${file#out/}"
+            id="${relative%/video.mp4}"
+            name="${id//\//-}"
+            cp "$file" "artifact/videos/${name}.mp4"
+          done < <(find out -type f -name 'video.mp4' -print0 2>/dev/null || true)
+          echo "Videos staged: $(find artifact/videos -maxdepth 1 -name '*.mp4' | wc -l)"
+      - name: Upload videos (MP4 only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-videos-${{ github.run_number }}
+          path: artifact/videos/*.mp4
+          if-no-files-found: warn
+          retention-days: 14
+          compression-level: 0
+      - name: Summary
+        if: always()
+        run: |
+          count=$(find artifact/videos -maxdepth 1 -name '*.mp4' | wc -l)
+          {
+            echo "## Video artifact"
+            echo "${count} MP4 file(s) in artifact **batch-videos-${{ github.run_number }}**."
+            echo "Artifact contents are video files only — no HTML, source specs, or code."
+            echo '```'
+            tail -n 40 batch.log 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

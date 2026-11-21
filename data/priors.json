@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "seed": {
+    "interrupt": {
+      "retention3s": 0.71,
+      "completion": 0.38
+    },
+    "curiosity": {
+      "retention3s": 0.68,
+      "completion": 0.35
+    },
+    "contrarian": {
+      "retention3s": 0.64,
+      "completion": 0.33
+    },
+    "number": {
+      "retention3s": 0.59,
+      "completion": 0.31
+    },
+    "steal": {
+      "retention3s": 0.61,
+      "completion": 0.36
+    },
+    "empathy": {
+      "retention3s": 0.57,
+      "completion": 0.34
+    }
+  },
+  "measured": [
+    {
+      "formula": "contrarian",
+      "n": 1,
+      "retention3s": 0.79,
+      "completion": 0.7758,
+      "rows": 33100,
+      "updatedAt": "2026-11-20T18:01:05.013Z"
+    },
+    {
+      "formula": "interrupt",
+      "n": 2,
+      "retention3s": 0.6886,
+      "completion": 0.637,
+      "rows": 43000,
+      "updatedAt": "2026-11-20T18:01:05.013Z"
+    },
+    {
+      "formula": "curiosity",
+      "n": 2,
+      "retention3s": 0.5844,
+      "completion": 0.483,
+      "rows": 17900,
+      "updatedAt": "2026-11-20T18:01:05.013Z"
+    },
+    {
+      "formula": "number",
+      "n": 1,
+      "retention3s": 0.44,
+      "completion": 0.4,
+      "rows": 9200,
+      "updatedAt": "2026-11-20T18:01:05.013Z"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+1
+00:00:00,000 --> 00:00:02,198
+Your first two seconds are lying.
+
+2
+00:00:00,000 --> 00:00:02,121
+They describe the topic. The viewer
+
+3
+00:00:02,121 --> 00:00:00,772
+already knows the topic. Thirty seven
+
+4
+00:00:00,772 --> 00:00:02,455
+of forty opened with the same
+
+5
+00:00:02,455 --> 00:00:01,687
+sentence. Rewriting only the first line
+
+6
+00:00:01,687 --> 00:00:03,711
+moved retention from twenty four to
+
+7
+00:00:03,711 --> 00:00:00,889
+seventy one percent. So the system
+
+8
+00:00:00,889 --> 00:00:02,909
+is: cut the intro, state the
+
+9
+00:00:02,909 --> 00:00:05,495
+conflict, prove it in one number.
+
+10
+00:00:00,000 --> 00:00:02,106
+Here is the template I keep
+
+11
+00:00:02,106 --> 00:00:01,505
+in the repo. So stop describing.
+
+12
+00:00:01,505 --> 00:00:03,463
+Start at the end. Your first
+
+13
+00:00:03,463 --> 00:00:05,495
+two seconds are lying to you.

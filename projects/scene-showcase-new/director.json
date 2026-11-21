@@ -1,0 +1,149 @@
+{
+  "specVersion": "1.0",
+  "id": "scene-showcase-new",
+  "format": "short",
+  "aspect": "9:16",
+  "platform": [
+    "youtube",
+    "tiktok",
+    "reels"
+  ],
+  "language": "en",
+  "fps": 30,
+  "thesis": "Four new scene types: glitch interrupts, dot grids for scale, timelines for history, quotes for authority.",
+  "audience": "solo developers and creators under 100k followers",
+  "angle": "contrarian",
+  "originality": {
+    "uniqueInput": "my own review of 40 failed shorts and the exact opening lines they used",
+    "dataRefs": [],
+    "claimsToVerify": [
+      "hook timing thresholds"
+    ]
+  },
+  "hooks": [
+    {
+      "id": "h1",
+      "text": "Four new ways to hold attention.",
+      "formula": "curiosity",
+      "score": 0.7
+    }
+  ],
+  "beats": [
+    {
+      "id": "hook",
+      "role": "hook",
+      "vo": "Four new ways to hold attention.",
+      "onScreen": "four new scenes",
+      "emphasis": [
+        "four"
+      ],
+      "maxSec": 2.6,
+      "visual": {
+        "type": "kinetic-type",
+        "motion": "slam"
+      }
+    },
+    {
+      "id": "glitch",
+      "role": "tension",
+      "vo": "When a claim is wrong, break the frame.",
+      "onScreen": "THIS IS WRONG",
+      "emphasis": [],
+      "maxSec": 3.2,
+      "visual": {
+        "type": "glitch",
+        "motion": "none"
+      }
+    },
+    {
+      "id": "dots",
+      "role": "payoff",
+      "vo": "When the point is scale, show the system, not a photo.",
+      "onScreen": "everything is interlinked",
+      "emphasis": [],
+      "maxSec": 4,
+      "visual": {
+        "type": "dot-grid",
+        "motion": "zoom",
+        "seed": 90210
+      }
+    },
+    {
+      "id": "time",
+      "role": "payoff",
+      "vo": "When the point is history, draw the axis.",
+      "onScreen": "three versions, one idea",
+      "emphasis": [],
+      "maxSec": 4.4,
+      "visual": {
+        "type": "timeline",
+        "motion": "rise",
+        "nodes": [
+          "remotion",
+          "revideo",
+          "this engine"
+        ]
+      }
+    },
+    {
+      "id": "quote",
+      "role": "payoff",
+      "vo": "And when someone else already said it better, quote them.",
+      "onScreen": "ship the boring version first",
+      "emphasis": [],
+      "maxSec": 4.4,
+      "visual": {
+        "type": "quote",
+        "motion": "rise",
+        "left": "Ship the boring version first.",
+        "right": "every senior engineer"
+      }
+    },
+    {
+      "id": "loop",
+      "role": "loop",
+      "vo": "Four new ways to hold attention.",
+      "onScreen": "four new scenes",
+      "emphasis": [],
+      "maxSec": 3.4,
+      "visual": {
+        "type": "abstract",
+        "motion": "zoom",
+        "seed": 5551
+      }
+    }
+  ],
+  "style": {
+    "templateFamily": "kinetic-doc",
+    "variationSeed": 90210,
+    "captionStyle": "karaoke",
+    "grain": 0.04,
+    "vignette": 0.24,
+    "progressBar": true
+  },
+  "audio": {
+    "voice": "af_heart",
+    "speed": 1.05,
+    "duckDb": -14,
+    "loudnessTargetLufs": -14
+  },
+  "publish": {
+    "title": "Your first 2 seconds are lying to you",
+    "description": "",
+    "tags": [
+      "shorts",
+      "content strategy",
+      "hooks",
+      "retention"
+    ],
+    "disclosure": {
+      "syntheticVoice": true,
+      "aiGeneratedVisuals": false
+    }
+  },
+  "budget": {
+    "maxLLMCalls": 6,
+    "maxAssetFetches": 0,
+    "maxRenderMinutes": 12
+  }
+}

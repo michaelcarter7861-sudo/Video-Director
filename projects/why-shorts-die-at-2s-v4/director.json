@@ -1,0 +1,199 @@
+{
+  "specVersion": "1.0",
+  "id": "why-shorts-die-at-2s-v4",
+  "format": "short",
+  "aspect": "9:16",
+  "platform": [
+    "youtube",
+    "tiktok",
+    "reels"
+  ],
+  "language": "en",
+  "fps": 30,
+  "thesis": "Shorts die in the first two seconds because the opening line describes the topic instead of breaking expectation.",
+  "audience": "solo developers and creators under 100k followers",
+  "angle": "contrarian",
+  "originality": {
+    "uniqueInput": "my own review of 40 failed shorts and the exact opening lines they used",
+    "dataRefs": [],
+    "claimsToVerify": [
+      "hook timing thresholds"
+    ]
+  },
+  "hooks": [
+    {
+      "id": "h1",
+      "text": "Your first two seconds are lying to you.",
+      "formula": "interrupt",
+      "score": 0.82
+    },
+    {
+      "id": "h2",
+      "text": "I watched 40 dead shorts. They all opened the same way.",
+      "formula": "number",
+      "score": 0.78
+    },
+    {
+      "id": "h3",
+      "text": "Stop introducing your video.",
+      "formula": "contrarian",
+      "score": 0.74
+    }
+  ],
+  "beats": [
+    {
+      "id": "hook",
+      "role": "hook",
+      "vo": "Your first two seconds are lying to you.",
+      "onScreen": "Your first two seconds are",
+      "emphasis": [
+        "2",
+        "LYING"
+      ],
+      "maxSec": 2.6,
+      "visual": {
+        "type": "kinetic-type",
+        "motion": "reveal-word"
+      }
+    },
+    {
+      "id": "tension",
+      "role": "tension",
+      "vo": "They describe the topic. The viewer already knows the topic.",
+      "onScreen": "describing beats disrupting",
+      "emphasis": [],
+      "maxSec": 4,
+      "visual": {
+        "type": "split",
+        "motion": "rise",
+        "left": "In this video I will talk about...",
+        "right": "You are losing at 2 seconds."
+      }
+    },
+    {
+      "id": "proof",
+      "role": "payoff",
+      "vo": "Thirty seven of forty opened with the same sentence.",
+      "onScreen": "37 of 40",
+      "emphasis": [
+        "37"
+      ],
+      "maxSec": 4,
+      "visual": {
+        "type": "stat",
+        "motion": "zoom",
+        "value": 37,
+        "suffix": " / 40"
+      }
+    },
+    {
+      "id": "chart",
+      "role": "payoff",
+      "vo": "Rewriting only the first line moved retention from twenty four to seventy one percent.",
+      "onScreen": "only the first line changed",
+      "emphasis": [],
+      "maxSec": 6,
+      "visual": {
+        "type": "chart",
+        "motion": "rise",
+        "chartType": "bar",
+        "data": [
+          {
+            "label": "old hook",
+            "value": 24
+          },
+          {
+            "label": "new hook",
+            "value": 71
+          },
+          {
+            "label": "target",
+            "value": 90
+          }
+        ]
+      }
+    },
+    {
+      "id": "method",
+      "role": "payoff",
+      "vo": "So the system is: cut the intro, state the conflict, prove it in one number.",
+      "onScreen": "the 3 step fix",
+      "emphasis": [],
+      "maxSec": 6,
+      "visual": {
+        "type": "diagram",
+        "motion": "rise",
+        "nodes": [
+          "cut the intro",
+          "state conflict",
+          "prove with one number"
+        ]
+      }
+    },
+    {
+      "id": "code",
+      "role": "payoff",
+      "vo": "Here is the template I keep in the repo.",
+      "onScreen": "the hook template",
+      "emphasis": [],
+      "maxSec": 4,
+      "visual": {
+        "type": "code",
+        "motion": "rise",
+        "lang": "ts",
+        "code": "const hook = (topic: string) =>\n  `Your ${topic} is lying to you.`;\n\n// no greeting\n// no channel intro\n// one conflict",
+        "highlight": [
+          1,
+          2,
+          5
+        ]
+      }
+    },
+    {
+      "id": "loop",
+      "role": "loop",
+      "vo": "So stop describing. Start at the end. Your first two seconds are lying to you.",
+      "onScreen": "start at the end",
+      "emphasis": [],
+      "maxSec": 6,
+      "visual": {
+        "type": "abstract",
+        "motion": "zoom",
+        "seed": 41729
+      }
+    }
+  ],
+  "style": {
+    "templateFamily": "data-story",
+    "variationSeed": 4014,
+    "captionStyle": "line",
+    "grain": 0.04,
+    "vignette": 0.24,
+    "progressBar": true
+  },
+  "audio": {
+    "voice": "af_heart",
+    "speed": 1.05,
+    "duckDb": -14,
+    "loudnessTargetLufs": -14
+  },
+  "publish": {
+    "title": "Your first two seconds are lying to you.",
+    "description": "",
+    "tags": [
+      "shorts",
+      "content strategy",
+      "hooks",
+      "retention"
+    ],
+    "disclosure": {
+      "syntheticVoice": true,
+      "aiGeneratedVisuals": false
+    }
+  },
+  "budget": {
+    "maxLLMCalls": 6,
+    "maxAssetFetches": 0,
+    "maxRenderMinutes": 12
+  }
+}

@@ -1,0 +1,51 @@
+1
+00:00:00,000 --> 00:00:00,771
+Stop introducing your video. They describe
+
+2
+00:00:00,771 --> 00:00:02,892
+the topic. The viewer already knows
+
+3
+00:00:02,892 --> 00:00:01,263
+the topic. Thirty seven of forty
+
+4
+00:00:01,263 --> 00:00:00,607
+opened with the same sentence. Rewriting
+
+5
+00:00:00,607 --> 00:00:02,631
+only the first line moved retention
+
+6
+00:00:02,631 --> 00:00:04,386
+from twenty four to seventy one
+
+7
+00:00:04,386 --> 00:00:01,455
+percent. So the system is: cut
+
+8
+00:00:01,455 --> 00:00:04,121
+the intro, state the conflict, prove
+
+9
+00:00:04,121 --> 00:00:00,550
+it in one number. Here is
+
+10
+00:00:00,550 --> 00:00:02,564
+the template I keep in the
+
+11
+00:00:02,564 --> 00:00:02,032
+repo. So stop describing. Start at
+
+12
+00:00:02,032 --> 00:00:04,215
+the end. Your first two seconds
+
+13
+00:00:04,215 --> 00:00:05,495
+are lying to you.

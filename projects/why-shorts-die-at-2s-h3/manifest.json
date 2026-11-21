@@ -1,0 +1,40 @@
+{
+  "id": "why-shorts-die-at-2s-h3",
+  "licenses": [
+    {
+      "asset": "Inter",
+      "kind": "font",
+      "source": "npm @fontsource/inter",
+      "license": "OFL-1.1",
+      "attribution": "Rasmus Andersson"
+    },
+    {
+      "asset": "Space Grotesk",
+      "kind": "font",
+      "source": "npm @fontsource/space-grotesk",
+      "license": "OFL-1.1",
+      "attribution": "Florian Karsten"
+    },
+    {
+      "asset": "JetBrains Mono",
+      "kind": "font",
+      "source": "npm @fontsource/jetbrains-mono",
+      "license": "OFL-1.1",
+      "attribution": "JetBrains"
+    },
+    {
+      "asset": "voiceover",
+      "kind": "audio",
+      "source": "tts:af_heart",
+      "license": "model-dependent (Kokoro-82M = Apache-2.0)",
+      "attribution": "Synthetic voice generated locally"
+    },
+    {
+      "asset": "renderer",
+      "kind": "code",
+      "source": "video-director (this repo) / @napi-rs/canvas / ffmpeg (LGPL build)",
+      "license": "MIT / MIT / LGPL-2.1+",
+      "attribution": "Programmatic rendering — no stock footage used"
+    }
+  ]
+}

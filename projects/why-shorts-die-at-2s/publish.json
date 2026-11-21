@@ -1,0 +1,75 @@
+{
+  "id": "why-shorts-die-at-2s",
+  "titleVariants": [
+    "Shorts die in the first two seconds because the opening line describes the topic instead of…",
+    "Your first two seconds are lying to you. — Shorts die in the first two seconds because the…",
+    "So stop describing. Start at the end. Your first two seconds are lying to you."
+  ],
+  "description": "Shorts die in the first two seconds because the opening line describes the topic instead of breaking expectation.\n\nWhat is in this video:\n1. YOUR FIRST 2 SECONDS\n2. describing beats disrupting\n3. 37 of 40\n4. only the first line changed\n5. the 3 step fix\n6. the hook template\n7. start at the end\n\nAngle: contrarian · Audience: solo developers and creators under 100k followers\nBased on: my own review of 40 failed shorts and the exact opening lines they used\n\n\nVoice: synthetic (af_heart). Visuals: programmatically rendered.\n#shorts #buildinpublic",
+  "tags": [
+    "shorts",
+    "content strategy",
+    "hooks",
+    "retention",
+    "first",
+    "seconds",
+    "because",
+    "opening",
+    "line",
+    "describes",
+    "topic",
+    "instead",
+    "breaking",
+    "expectation",
+    "lying"
+  ],
+  "hashtags": [
+    "#shorts",
+    "#contentstrategy",
+    "#hooks",
+    "#retention",
+    "#first"
+  ],
+  "disclosure": {
+    "syntheticVoice": true,
+    "aiGeneratedVisuals": false
+  },
+  "thumbnailFrame": 0,
+  "licenses": [
+    {
+      "asset": "Inter",
+      "kind": "font",
+      "source": "npm @fontsource/inter",
+      "license": "OFL-1.1",
+      "attribution": "Rasmus Andersson"
+    },
+    {
+      "asset": "Space Grotesk",
+      "kind": "font",
+      "source": "npm @fontsource/space-grotesk",
+      "license": "OFL-1.1",
+      "attribution": "Florian Karsten"
+    },
+    {
+      "asset": "JetBrains Mono",
+      "kind": "font",
+      "source": "npm @fontsource/jetbrains-mono",
+      "license": "OFL-1.1",
+      "attribution": "JetBrains"
+    },
+    {
+      "asset": "voiceover",
+      "kind": "audio",
+      "source": "tts:af_heart",
+      "license": "model-dependent (Kokoro-82M = Apache-2.0)",
+      "attribution": "Synthetic voice generated locally"
+    },
+    {
+      "asset": "renderer",
+      "kind": "code",
+      "source": "video-director (this repo) / @napi-rs/canvas / ffmpeg (LGPL build)",
+      "license": "MIT / MIT / LGPL-2.1+",
+      "attribution": "Programmatic rendering — no stock footage used"
+    }
+  ]
+}

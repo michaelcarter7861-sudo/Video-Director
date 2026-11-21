@@ -1,0 +1,14 @@
+# Optional local TTS with word-level timestamps (free, Apache-2.0 model).
+#   docker compose -f docker-compose.tts.yml up -d
+#   KOKORO_URL=http://127.0.0.1:8880 npx tsx src/cli.ts voice --text "hook line"
+services:
+  kokoro:
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:latest
+    ports:
+      - "8880:8880"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8880/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5

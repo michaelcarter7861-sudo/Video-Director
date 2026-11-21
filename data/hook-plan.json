@@ -1,0 +1,39 @@
+{
+  "specId": "why-shorts-die-at-2s",
+  "generatedAt": "2026-11-20T18:01:05.728Z",
+  "plans": [
+    {
+      "id": "why-shorts-die-at-2s-h1",
+      "hookId": "h1",
+      "formula": "interrupt",
+      "text": "Your first two seconds are lying to you.",
+      "spokenText": "Your first two seconds are lying to you.",
+      "estimatedSec": 3.2,
+      "trimmed": false,
+      "expected": 0.6287,
+      "source": "blended"
+    },
+    {
+      "id": "why-shorts-die-at-2s-h2",
+      "hookId": "h3",
+      "formula": "contrarian",
+      "text": "Stop introducing your video.",
+      "spokenText": "Stop introducing your video.",
+      "estimatedSec": 1.6,
+      "trimmed": false,
+      "expected": 0.5868,
+      "source": "blended"
+    },
+    {
+      "id": "why-shorts-die-at-2s-h3",
+      "hookId": "h2",
+      "formula": "number",
+      "text": "I watched 40 dead shorts. They all opened the same way.",
+      "spokenText": "I watched 40 dead shorts.",
+      "estimatedSec": 2,
+      "trimmed": true,
+      "expected": 0.493,
+      "source": "blended"
+    }
+  ]
+}

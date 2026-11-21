@@ -1,0 +1,122 @@
+{
+  "file": "/home/user/Video-Director/out/long-form-agent-video-engine/video.mp4",
+  "pass": true,
+  "gates": [
+    {
+      "id": "duration",
+      "label": "duration matches timeline",
+      "pass": true,
+      "value": "36.65s",
+      "expected": "36.57s ±0.25"
+    },
+    {
+      "id": "resolution",
+      "label": "resolution",
+      "pass": true,
+      "value": "1920x1080",
+      "expected": "1920x1080"
+    },
+    {
+      "id": "fps",
+      "label": "frame rate",
+      "pass": true,
+      "value": "30",
+      "expected": "30"
+    },
+    {
+      "id": "audio",
+      "label": "audio stream present",
+      "pass": true,
+      "value": "yes",
+      "expected": "yes"
+    },
+    {
+      "id": "loudness",
+      "label": "integrated loudness",
+      "pass": true,
+      "value": "-13.5 LUFS",
+      "expected": "-14 ±2.5 LUFS"
+    },
+    {
+      "id": "true-peak",
+      "label": "true peak",
+      "pass": true,
+      "value": "-7.2 dBTP",
+      "expected": "<= -0.5 dBTP"
+    },
+    {
+      "id": "no-black",
+      "label": "no featureless segments > 0.4s",
+      "pass": true,
+      "value": "0 (min luma 0)",
+      "expected": "0 (dark themes allowed)"
+    },
+    {
+      "id": "no-freeze",
+      "label": "no frozen segments > 1.5s",
+      "pass": true,
+      "value": "0",
+      "expected": "0"
+    },
+    {
+      "id": "onscreen-length",
+      "label": "on-screen text <= 5 words",
+      "pass": true,
+      "value": "0 beats over",
+      "expected": "0 beats"
+    },
+    {
+      "id": "hook-starts-at-zero",
+      "label": "hook is the first frame",
+      "pass": true,
+      "value": "starts f0",
+      "expected": "f0"
+    },
+    {
+      "id": "hook-speaks-early",
+      "label": "first hook word before 0.9s",
+      "pass": true,
+      "value": "0ms",
+      "expected": "<= 900ms"
+    },
+    {
+      "id": "hook-short",
+      "label": "hook beat <= 15.0s",
+      "pass": true,
+      "value": "3.70s",
+      "expected": "<= 15.00s"
+    },
+    {
+      "id": "visual-change",
+      "label": "no repeated consecutive visual",
+      "pass": true,
+      "value": "0 repeats",
+      "expected": "0"
+    },
+    {
+      "id": "file-size",
+      "label": "file size sane",
+      "pass": true,
+      "value": "4.4 MB",
+      "expected": "1KB - 500MB"
+    }
+  ],
+  "probe": {
+    "durationSec": 36.651,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "hasAudio": true,
+    "bitrate": 1015146,
+    "sizeBytes": 4650767
+  },
+  "measured": {
+    "loudnessLufs": -13.5,
+    "truePeakDb": -7.2,
+    "blackFrames": 0,
+    "frozenFrames": 0,
+    "minLuma": 0,
+    "sampledFrames": 0
+  },
+  "generatedAt": "2026-11-20T15:00:25.944Z"
+}

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://video-director.local/director.schema.json",
+  "title": "director.json",
+  "description": "The only contract between the LLM director and the deterministic engine. Runtime source of truth: src/schema/director.ts (zod). Keep both in sync.",
+  "type": "object",
+  "required": ["specVersion", "id", "format", "thesis", "originality", "hooks", "beats"],
+  "additionalProperties": false,
+  "properties": {
+    "specVersion": { "const": "1.0" },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-_]{2,80}$" },
+    "format": { "enum": ["short", "long"] },
+    "aspect": { "enum": ["9:16", "16:9", "1:1"], "default": "9:16" },
+    "platform": { "type": "array", "items": { "type": "string" }, "default": ["youtube", "tiktok", "reels"] },
+    "language": { "type": "string", "default": "en" },
+    "fps": { "type": "integer", "minimum": 24, "maximum": 60, "default": 30 },
+    "thesis": { "type": "string", "minLength": 10, "maxLength": 240 },
+    "audience": { "type": "string", "minLength": 2, "maxLength": 120 },
+    "angle": { "enum": ["contrarian", "curiosity", "data", "story", "tutorial"] },
+    "originality": {
+      "type": "object",
+      "required": ["uniqueInput"],
+      "additionalProperties": false,
+      "properties": {
+        "uniqueInput": { "type": "string", "minLength": 3, "maxLength": 400 },
+        "dataRefs": { "type": "array", "items": { "type": "string" } },
+        "claimsToVerify": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "hooks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["id", "text", "formula"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string", "minLength": 3, "maxLength": 140 },
+          "formula": { "enum": ["contrarian", "curiosity", "empathy", "number", "interrupt", "steal"] },
+          "score": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "beats": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 14,
+      "items": {
+        "type": "object",
+        "required": ["id", "role", "maxSec", "visual"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "role": { "enum": ["hook", "tension", "payoff", "rehook", "loop", "cta"] },
+          "vo": { "type": "string", "default": "" },
+          "onScreen": { "type": "string", "default": "" },
+          "emphasis": { "type": "array", "items": { "type": "string" }, "default": [] },
+          "maxSec": { "type": "number", "minimum": 0.4, "maximum": 30 },
+          "minSec": { "type": "number", "minimum": 0.2, "maximum": 30 },
+          "rehook": { "type": "boolean" },
+          "visual": {
+            "type": "object",
+            "required": ["type"],
+            "additionalProperties": false,
+            "properties": {
+              "type": { "enum": ["kinetic-type", "code", "terminal", "stat", "chart", "diagram", "split", "abstract", "glitch", "dot-grid", "timeline", "quote"] },
+              "motion": { "enum": ["slam", "rise", "wipe", "reveal-word", "zoom", "none"], "default": "rise" },
+              "lang": { "type": "string" },
+              "code": { "type": "string" },
+              "highlight": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
+              "lines": { "type": "array", "items": { "type": "string" } },
+              "value": { "type": "number" },
+              "prefix": { "type": "string" },
+              "suffix": { "type": "string" },
+              "decimals": { "type": "integer", "minimum": 0, "maximum": 4 },
+              "chartType": { "enum": ["bar", "line"] },
+              "data": { "type": "array", "items": { "type": "object", "required": ["label", "value"], "properties": { "label": { "type": "string" }, "value": { "type": "number" } } } },
+              "nodes": { "type": "array", "items": { "type": "string" } },
+              "edges": { "type": "array", "items": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 2 } },
+              "left": { "type": "string" },
+              "right": { "type": "string" },
+              "seed": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "templateFamily": { "enum": ["kinetic-doc", "terminal-explainer", "data-story", "neon-mono"] },
+        "variationSeed": { "type": "integer", "minimum": 1, "maximum": 99999 },
+        "captionStyle": { "enum": ["karaoke", "line", "none"] },
+        "grain": { "type": "number", "minimum": 0, "maximum": 0.2 },
+        "vignette": { "type": "number", "minimum": 0, "maximum": 0.6 },
+        "progressBar": { "type": "boolean" }
+      }
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "voice": { "type": "string" },
+        "speed": { "type": "number", "minimum": 0.7, "maximum": 1.4 },
+        "music": { "type": "string" },
+        "duckDb": { "type": "number", "minimum": -30, "maximum": 0 },
+        "loudnessTargetLufs": { "type": "number", "minimum": -24, "maximum": -9 }
+      }
+    },
+    "publish": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "disclosure": {
+          "type": "object",
+          "properties": { "syntheticVoice": { "type": "boolean" }, "aiGeneratedVisuals": { "type": "boolean" } }
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "maxLLMCalls": { "type": "integer", "minimum": 0 },
+        "maxAssetFetches": { "type": "integer", "minimum": 0 },
+        "maxRenderMinutes": { "type": "number", "minimum": 0.5 }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+node_modules/
+dist/
+out/
+assets/cache/
+*.mp4
+*.wav
+*.mp3
+*.png
+!docs/**/*.png
+projects/*/vo.wav
+projects/*/words.json
+logs/
+.DS_Store
+# OpenFilm exports are generated handoff artefacts, not source
+openfilm/
+.bin/
+# One-off generated narration/render workspace for the first real-voice short
+projects/first-real-short/
+
+# Generated build outputs for the demo short
+projects/first-short-skip-intro/
